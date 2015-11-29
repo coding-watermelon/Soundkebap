@@ -1,0 +1,18 @@
+2015-11-29T15:36:52.840494000 0.301375s notice: Recursively removing directory /Users/Markus/Development/Soundkebap/rethinkdb_data/tmp
+2015-11-29T15:36:52.842052000 0.302968s notice: Initializing directory /Users/Markus/Development/Soundkebap/rethinkdb_data
+2015-11-29T15:36:52.842196000 0.303076s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/Users/Markus/Development/Soundkebap/rethinkdb_data' did not already exist or is empty.)
+2015-11-29T15:36:52.842258000 0.303139s notice: Running rethinkdb 2.2.1 (CLANG 7.0.0 (clang-700.1.76))...
+2015-11-29T15:36:52.850071000 0.310952s notice: Running on Darwin 15.0.0 x86_64
+2015-11-29T15:36:52.850139000 0.311019s notice: Loading data from directory /Users/Markus/Development/Soundkebap/rethinkdb_data
+2015-11-29T15:36:52.963733000 0.424613s info: Automatically using cache size of 198 MB
+2015-11-29T15:36:52.964509000 0.425388s notice: Listening for intracluster connections on port 29015
+2015-11-29T15:36:52.967805000 0.428685s notice: Listening for client driver connections on port 28015
+2015-11-29T15:36:52.968016000 0.428896s notice: Listening for administrative HTTP connections on port 8080
+2015-11-29T15:36:52.968025000 0.428905s notice: Listening on addresses: 127.0.0.1, ::1
+2015-11-29T15:36:52.968027000 0.428907s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2015-11-29T15:36:52.968031000 0.428911s notice: Server ready, "Markuss_MacBook_Pro_local_mkj" 10280f5d-7a1a-4c82-97dd-7c1d36e1633c
+2015-11-29T15:37:55.792653000 63.255038s notice: Server got SIGINT from pid 32399, uid 501; shutting down...
+2015-11-29T15:37:55.793006000 63.255391s notice: Shutting down client connections...
+2015-11-29T15:37:55.793222000 63.255606s notice: All client connections closed.
+2015-11-29T15:37:55.793232000 63.255616s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2015-11-29T15:37:55.797686000 63.260071s notice: Storage engine shut down.

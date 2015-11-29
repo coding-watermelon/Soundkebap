@@ -1,0 +1,28 @@
+{
+  "name": "soundkebap",
+  "version": "1.0.0",
+  "description": "An online music radio that connects to soundcloud and plays music you like",
+  "main": "rethinkdb_init.js",
+  "scripts": {
+    "tsc": "tsc -p src -w",
+    "start": "live-server --open=src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sittenstrolch/Soundkebap.git"
+  },
+  "author": "Sebastian Rehfeldt, Markus Petrykowski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sittenstrolch/Soundkebap/issues"
+  },
+  "homepage": "https://github.com/Sittenstrolch/Soundkebap#readme",
+  "dependencies": {
+    "angular2": "2.0.0-alpha.44",
+    "systemjs": "0.19.2"
+  },
+  "devDependencies": {
+    "live-server": "^0.8.2",
+    "typescript": "^1.6.2"
+  }
+}
