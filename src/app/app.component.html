@@ -1,0 +1,9 @@
+
+<div *ng-for="#playlist of playlists">
+    <h1>{{playlist.title}} by {{playlist.user.username}}</h1>
+
+
+    <div *ng-for="#track of playlist.tracks">
+        {{track.title}}
+    </div>
+</div>
