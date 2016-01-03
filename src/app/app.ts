@@ -1,4 +1,4 @@
-import {bootstrap, Component, NgFor, ChangeDetectionStrategy, ChangeDetectorRef} from 'angular2/angular2';
+import {bootstrap, Component, NgFor, ChangeDetectionStrategy, ChangeDetectorRef. ElementRef} from 'angular2/angular2';
 
 @Component({
     selector: 'my-app',
@@ -11,11 +11,13 @@ export class AppComponent {
     public playlists:Array<Object>
     public trackId:int
     public trackNumber:int
-    public player
     public playing:boolean
-    public widget:Object
+    public player:Object
+    public element:HTMLElement
 
-    constructor(private ref: ChangeDetectorRef){
+    constructor(private ref: ChangeDetectorRef, private elementRef: ElementRef){
+        this.element= elementRef.nativeElement
+
         this.playlists = []
         this.trackNumber=0
         this.playing=false
@@ -32,26 +34,29 @@ export class AppComponent {
             SC.get("/users/"+user.id+"/playlists").then((response)=>{
                 this.playlists = response
                 this.trackId = this.playlists[0].tracks[this.trackNumber].id
-                this.update();
-                console.log(response)
+
+                SC.oEmbed(this.playlists[0].tracks[this.trackNumber].uri, { auto_play: false }).then((oEmbed) =>{
+                    this.widget = oEmbed.html
+                    this.update()
+                })
+
+                this.update()
             })
         })
     }
 
     play(){
-        SC.oEmbed(this.playlists[0].tracks[this.trackNumber].uri, { auto_play: true }).then((oEmbed) =>{
-            console.log('oEmbed response: ', oEmbed);
-            this.widget = oEmbed.html
-            this.update()
-        });
+        this.player = SC.Widget(this.element.getElementsByTagName("iframe")[0])
+        this.player.play()
+        this.player.bind(SC.Widget.Events.FINISH, () => {
+            this.next()
+        })
     }
 
     next(){
-        SC.oEmbed(this.playlists[0].tracks[++this.trackNumber].uri, { auto_play: true }).then((oEmbed) =>{
-            console.log('oEmbed response: ', oEmbed);
-            this.widget = oEmbed.html
-            this.update()
-        });
+        this.player.load(this.playlists[0].tracks[++this.trackNumber].uri, {
+            auto_play: true
+        })
     }
 }
 bootstrap(AppComponent);
