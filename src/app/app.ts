@@ -58,5 +58,11 @@ export class AppComponent {
             auto_play: true
         })
     }
+
+    login(){
+        SC.connect().then(function(){
+            console.log("login")
+        })
+    }
 }
 bootstrap(AppComponent);
