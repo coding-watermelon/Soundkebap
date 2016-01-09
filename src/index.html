@@ -1,13 +1,21 @@
 <html>
   <head>
-    <title>Angular 2 QuickStart</title>
+    <title>Soundkebap</title>
     <script src="../node_modules/systemjs/dist/system.src.js"></script>
     <script src="../node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="../node_modules/soundcloud/sdk.js"></script>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
     <script>
       System.config({
         packages: {'app': {defaultExtension: 'js'}}
       });
       System.import('app/app');
+    </script>
+    <script>
+      SC.initialize({
+        client_id: 'a1c4188f7622b71c3e7c6cf7567fc488',
+        redirect_uri: 'http://localhost:8080/src/callback.html' //ToDo: callbackFile needs to be registered on yourApps on soundcloud
+      });
     </script>
   </head>
   <body>
