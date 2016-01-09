@@ -5,7 +5,7 @@
   "main": "rethinkdb_init.js",
   "scripts": {
     "tsc": "tsc -p src -w",
-    "start": "live-server --open=src"
+    "start": "live-server --open=hero_tutorial"
   },
   "repository": {
     "type": "git",
