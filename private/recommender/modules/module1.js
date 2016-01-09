@@ -8,22 +8,20 @@ const q = require('q');
 
 
 module.exports = {
-  getRecommondation
+  getRecommendation
 }
 
-function getRecommondation(user){
+function getRecommendation(user){
   var deferred = q.defer()
 
-  var recommendation = []
-
   soundcloud.getConnections(user.id).then(function(connections){
-
     soundcloud.getTracks(connections).then(function(tracks){
-      //console.log(tracks)
+      deferred.resolve(tracks)
+
     })
 
   })
 
-  deferred.resolve(recommendation)
   return deferred.promise
+
 }
