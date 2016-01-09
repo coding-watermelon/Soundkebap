@@ -103,7 +103,6 @@ function getTracksFromUser(id){
 
 function getPlaylistsFromUser(id){
     var deferred = q.defer()
-    //console.log(id)
     SC.get("/users/"+id+"/playlists", function(err, response) {
         if ( err ) {
             throw err;
@@ -126,8 +125,7 @@ function getTracks(connections){
     var users = connections.follower.concat(connections.following)
 
     for(var i=0;i<users.length;i++){
-        id = users[i]
-
+        var id = users[i]
         promises.push(getTracksFromUser(id))
         promises.push(getPlaylistsFromUser(id))
     }
@@ -137,7 +135,6 @@ function getTracks(connections){
         for(var i=0; i<response.length;i++){
             tracks = tracks.concat(response[i])
         }
-
         deferred.resolve(tracks)
     })
 
