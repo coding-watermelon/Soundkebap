@@ -18,7 +18,7 @@ app.use( express.static(__dirname + '/src') )
 app.use( express.static(__dirname + '/node_modules') )
 
 // --- route initialization
-// require('./private/routes.js')(app)
+require('./private/routes.js')(app)
 
 // --- server and https setup
 app.listen(port)

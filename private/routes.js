@@ -1,4 +1,5 @@
-var db = require(__dirname + "/database.js")
+const db            = require(__dirname + "/database/database.js"),
+      recommender   = require(__dirname + "/recommender/recommender.js")
 
 module.exports = function(app) {
 
@@ -12,6 +13,22 @@ module.exports = function(app) {
     .post(function(req, res){
 
     })
+
+  app.route('/api/newTracks')
+    .get(function(req, res) {
+
+      db.getUser(req.query.userId)
+        .then(recommender.getRecommondation)
+        .then(function(tracklist){
+          res.send(tracklist)
+        })
+        .catch(function(err){
+          console.log(err)
+          res.sendStatus(505)
+        })
+
+    })
+
 
 
 }

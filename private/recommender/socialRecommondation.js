@@ -2,9 +2,10 @@
 Short Module description
 
 */
-var module1 = require('./modules/module1.js')
-var SC = require('soundcloud')
-var q = require('q')
+const module1 = require('./modules/module1.js')
+const SC = require('soundcloud')
+const q = require('q')
+
 
 
 
@@ -18,6 +19,10 @@ function getRecommendation(user){
 
   //var recommendation = module1.getRecommondation(user)
 
-  deferred.resolve(user)
+
+
+
+  deferred.resolve(["12314", "1235234"])
+
   return deferred.promise
 }
