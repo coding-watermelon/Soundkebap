@@ -19,8 +19,12 @@
   "homepage": "https://github.com/Sittenstrolch/Soundkebap#readme",
   "dependencies": {
     "angular2": "2.0.0-alpha.44",
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "path": "^0.12.7",
     "plangular": "0.0.1",
     "soundcloud": "^3.0.1",
+    "stylus": "^0.53.0",
     "systemjs": "0.19.2"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import {bootstrap, Component, NgFor, ChangeDetectionStrategy, ChangeDetectorRef. ElementRef} from 'angular2/angular2';
+import {bootstrap, Component, NgFor, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef} from 'angular2/angular2';
 
 @Component({
     selector: 'my-app',
