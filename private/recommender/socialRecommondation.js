@@ -2,9 +2,9 @@
 Short Module description
 
 */
-const module1 = require('./modules/module1.js')
-const SC = require('node-soundcloud')
-const q = require('q')
+const module1 = require(__dirname + './modules/module1.js'),
+      SC = require('node-soundcloud'),
+      q = require('q')
 
 
 
