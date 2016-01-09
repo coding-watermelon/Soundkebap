@@ -2,7 +2,9 @@
 Short Module description
 
 */
-var SC = require('soundcloud');
+const soundcloud = require('./soundcloudModule.js')
+const q = require('q');
+
 
 module.exports = {
   getRecommondation
@@ -11,10 +13,14 @@ module.exports = {
 function getRecommondation(user){
   var deferred = q.defer()
 
-  var recommendation = {}
-  SC.get("/users/"+user.id+"/followers").then(function(followers){
-    console.log("FOLLOWERS")
-    console.log(followers)
+  var recommendation = []
+
+  soundcloud.getConnections(user.id).then(function(connections){
+
+    soundcloud.getTracks(connections).then(function(tracks){
+      //console.log(tracks)
+    })
+
   })
 
   deferred.resolve(recommendation)

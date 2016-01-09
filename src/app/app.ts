@@ -64,5 +64,9 @@ export class AppComponent {
             console.log("login")
         })
     }
+
+    testRecommendation(){
+
+    }
 }
 bootstrap(AppComponent);
