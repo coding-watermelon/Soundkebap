@@ -18,11 +18,11 @@ module.exports = function(app) {
 
   app.route('/api/newTracks')
     .get(function(req, res) {
-
+      console.log(req.query.userId)
       db.getUser(req.query.userId)
-        .then(recommender.getRecommondation)
+        .then(recommender.getRecommendation)
         .then(function(tracklist){
-          res.send(tracklist)
+          res.status(200).send(tracklist)
         })
         .catch(function(err){
           console.log(err)

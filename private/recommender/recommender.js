@@ -5,12 +5,12 @@ Short Module description
 */
 
 module.exports = {
-  getRecommondation
+  getRecommendation
 }
 
 const q                   = require('q'),
       contentRecommender  = require(__dirname + "/contentRecommender.js")
 
-function getRecommondation(user){
-  return contentRecommender.getRecommondation(user)
+function getRecommendation(user){
+  return contentRecommender.getRecommendation(user)
 }
