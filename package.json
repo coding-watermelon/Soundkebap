@@ -21,6 +21,7 @@
     "angular2": "2.0.0-alpha.44",
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
+    "node-soundcloud": "0.0.4",
     "path": "^0.12.7",
     "plangular": "0.0.1",
     "q": "^1.4.1",

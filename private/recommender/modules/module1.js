@@ -2,7 +2,7 @@
 Short Module description
 
 */
-const soundcloud = require(__dirname + '../../soundcloud/connector.js')
+const soundcloud = require(__dirname + '/../../soundcloud/connector.js')
 const q = require('q');
 
 

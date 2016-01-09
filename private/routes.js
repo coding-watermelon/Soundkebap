@@ -1,5 +1,7 @@
+'use strict'
 const db            = require(__dirname + "/database/database.js"),
-      recommender   = require(__dirname + "/recommender/recommender.js")
+      recommender   = require(__dirname + "/recommender/recommender.js"),
+      soundcloud    = require(__dirname + "/soundcloud/connector.js")
 
 module.exports = function(app) {
 
@@ -38,7 +40,10 @@ module.exports = function(app) {
     .post(function(req, res){
 
       //Get the soundcloud user and add it to db
-      
+      soundcloud.getUser('921432')
+        .then(function(user){
+          res.send(user)
+        })
     })
 
 

@@ -1,8 +1,9 @@
+'use strict'
 /*
 Short Module description
 
 */
-const module1 = require(__dirname + './modules/module1.js'),
+const module1 = require(__dirname + '/modules/module1.js'),
       SC = require('node-soundcloud'),
       q = require('q')
 
@@ -12,13 +13,7 @@ const module1 = require(__dirname + './modules/module1.js'),
 function getRecommendation(user){
   const deferred = q.defer()
 
-  var recommendation = []
-
-  SC.init({
-    id: 'a1c4188f7622b71c3e7c6cf7567fc488',
-    secret: 'e1162fe35d42826eacdca456b75d15da',
-    accessToken: '1-162111-131842115-01c04c60d99c9'
-  });
+  let recommendation = []
 
   module1.getRecommondation(user).then(function(response){
     recommendation = response
