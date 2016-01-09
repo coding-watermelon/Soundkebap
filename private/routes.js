@@ -29,6 +29,19 @@ module.exports = function(app) {
 
     })
 
+  app.route('/api/user/sessionStart')
+    .post(function(req,res){
+
+    })
+
+  app.route('/api/user/add')
+    .post(function(req, res){
+
+      //Get the soundcloud user and add it to db
+      
+    })
+
+
 
 
 }

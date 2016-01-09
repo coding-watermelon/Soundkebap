@@ -9,8 +9,8 @@ const q = require('q')
 
 
 
-function getRecommendation(user) {
-  var deferred = q.defer()
+function getRecommendation(user){
+  const deferred = q.defer()
 
   var recommendation = []
 

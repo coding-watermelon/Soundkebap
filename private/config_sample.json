@@ -1,0 +1,13 @@
+{
+  "database": {
+    "port": 23770,
+    "host": "192.168.11.100",
+    "name": "soundkebap"
+  },
+
+  "soundcloud": {
+    "client-id": "abc123",
+    "client-secret": "abc1234"
+  }
+
+}

@@ -4,3 +4,5 @@ src/**/*.js
 src/**/*.js.map
 hero_tutorial
 rethinkdb_data/
+
+private/config.json

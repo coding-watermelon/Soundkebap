@@ -7,8 +7,8 @@ module.exports = {
   getRecommondation
 }
 
-var q                   = require('q'),
-    contentRecommender  = require(__dirname + "/contentRecommender.js")
+const q                   = require('q'),
+      contentRecommender  = require(__dirname + "/contentRecommender.js")
 
 function getRecommondation(user){
   return contentRecommender.getRecommondation(user)
