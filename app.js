@@ -6,7 +6,7 @@ var stylus        = require('stylus'),
     bodyParser    = require('body-parser'),
     path          = require('path'),
     q             = require('q'),
-    port          = 8080
+    port          = 7070
 
 
 // --- app configuration
@@ -18,7 +18,7 @@ app.use( express.static(__dirname + '/src') )
 app.use( express.static(__dirname + '/node_modules') )
 
 // --- route initialization
-// require('./private/routes.js')(app)
+require('./private/routes.js')(app)
 
 // --- server and https setup
 app.listen(port)
