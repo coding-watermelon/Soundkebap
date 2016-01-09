@@ -6,7 +6,7 @@ var stylus        = require('stylus'),
     bodyParser    = require('body-parser'),
     path          = require('path'),
     q             = require('q'),
-    port          = 8080
+    port          = 7070
 
 
 // --- app configuration
