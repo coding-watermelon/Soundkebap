@@ -1,17 +1,39 @@
+'use strict'
 /*
  Short Module description
 
  */
-const SC = require('node-soundcloud');
-const q = require('q');
+const SC        = require('node-soundcloud'),
+      q         = require('q'),
+      config    = require(__dirname + "/../config.json")
+
+SC.init({
+  id: config.soundcloud["client-id"],
+  secret: config.soundcloud["client-secret"],
+  accessToken: config.soundcloud.accessToken
+});
 
 module.exports = {
+    getUser,
     getFollowers,
     getFollowings,
     getConnections,
     getTracksFromUser,
     getPlaylistsFromUser,
     getTracks
+}
+
+function getUser(id, accessToken){
+  var deferred = q.defer()
+  SC.get("/users/"+id, function(err, user) {
+      if ( err ) {
+          throw err;
+      } else {
+          user.accessToken = accessToken
+          deferred.resolve(user)
+      }
+  })
+  return deferred.promise
 }
 
 function getFollowers(id){

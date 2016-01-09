@@ -1,24 +1,15 @@
+'use strict'
 /*
 Short Module description
 
 */
-const module1 = require('./modules/module1.js')
-const SC = require('node-soundcloud')
-const q = require('q')
-const config = require(__dirname+'/../config.json')
 
-
+const module1 = require(__dirname + '/modules/module1.js'),
+      SC = require('node-soundcloud'),
+      q = require('q')
 
 function getRecommendation(user){
   const deferred = q.defer()
-
-  var recommendation = []
-
-  SC.init({
-    id: config.soundcloud["client-id"],
-    secret: config.soundcloud["client-secret"],
-    accessToken: config.soundcloud.accessToken
-  });
 
   module1.getRecommendation(user).then(function(response){
       deferred.resolve(response)
