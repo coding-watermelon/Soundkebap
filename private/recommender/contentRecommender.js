@@ -3,12 +3,12 @@ Short Module description
 
 */
 
-const socialRecommender = require(__dirname + "/socialRecommondation.js")
+const socialRecommender = require(__dirname + "/socialRecommendation.js")
 
 module.exports = {
-  getRecommondation
+  getRecommendation
 }
 
-function getRecommondation(user){
-  return socialRecommender.getRecommondation(user)
+function getRecommendation(user){
+  return socialRecommender.getRecommendation(user)
 }

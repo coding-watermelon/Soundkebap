@@ -42,6 +42,7 @@ function getConnections(id){
     var deferred = q.defer()
     var promises = []
 
+
     promises.push(getFollowers(id))
     promises.push(getFollowings(id))
 
@@ -68,10 +69,11 @@ function getTracksFromUser(id){
         if ( err ) {
             throw err;
         } else {
-            for(var i=0; i<1;i++){
-                console.log(response[i])
+            var tracks = []
+            for(var i=0; i<response.length;i++){
+                tracks.push(response[i].id)
             }
-            deferred.resolve(response)
+            deferred.resolve(tracks)
         }
     })
     return deferred.promise
@@ -84,8 +86,13 @@ function getPlaylistsFromUser(id){
         if ( err ) {
             throw err;
         } else {
-            console.log(response[0])
-            deferred.resolve(response)
+            var tracks = []
+            for(var i=0; i< response.length;i++){
+                for(var j=0;j<response[i].tracks.length;j++){
+                    tracks.push(response[i].tracks[j].id)
+                }
+            }
+            deferred.resolve(tracks)
         }
     })
     return deferred.promise
@@ -94,8 +101,7 @@ function getPlaylistsFromUser(id){
 function getTracks(connections){
     var deferred = q.defer()
     var promises = []
-    var users = []
-    users = connections.follower.concat(connections.following)
+    var users = connections.follower.concat(connections.following)
 
     for(var i=0;i<users.length;i++){
         id = users[i]
@@ -105,9 +111,12 @@ function getTracks(connections){
     }
 
     q.all(promises).then(function(response){
+        var tracks = []
         for(var i=0; i<response.length;i++){
-
+            tracks = tracks.concat(response[i])
         }
+
+        deferred.resolve(tracks)
     })
 
     return deferred.promise

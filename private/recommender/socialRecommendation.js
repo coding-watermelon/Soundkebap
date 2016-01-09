@@ -5,7 +5,7 @@ Short Module description
 const module1 = require('./modules/module1.js')
 const SC = require('node-soundcloud')
 const q = require('q')
-
+const config = require(__dirname+'/../config.json')
 
 
 
@@ -15,18 +15,14 @@ function getRecommendation(user){
   var recommendation = []
 
   SC.init({
-    id: 'a1c4188f7622b71c3e7c6cf7567fc488',
-    secret: 'e1162fe35d42826eacdca456b75d15da',
-    accessToken: '1-162111-131842115-01c04c60d99c9'
+    id: config.soundcloud["client-id"],
+    secret: config.soundcloud["client-secret"],
+    accessToken: config.soundcloud.accessToken
   });
 
-  module1.getRecommondation(user).then(function(response){
-    recommendation = response
+  module1.getRecommendation(user).then(function(response){
+      deferred.resolve(response)
   })
-
-
-
-  deferred.resolve(recommendation)
 
   return deferred.promise
 }
@@ -57,4 +53,6 @@ getRecommendation({ id: 131842115,
       followers_count: 6,
       followings_count: 17,
       subscriptions: [] }
-)
+).then(function(tracks){
+        console.log(tracks)
+    })
