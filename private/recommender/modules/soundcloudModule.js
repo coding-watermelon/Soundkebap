@@ -63,6 +63,9 @@ function getTracksFromUser(id){
         if ( err ) {
             throw err;
         } else {
+            for(var i=0; i<1;i++){
+                console.log(response[i])
+            }
             deferred.resolve(response)
         }
     })
@@ -71,11 +74,12 @@ function getTracksFromUser(id){
 
 function getPlaylistsFromUser(id){
     var deferred = q.defer()
-    console.log(id)
+    //console.log(id)
     SC.get("/users/"+id+"/playlists", function(err, response) {
         if ( err ) {
             throw err;
         } else {
+            console.log(response[0])
             deferred.resolve(response)
         }
     })
@@ -96,9 +100,6 @@ function getTracks(connections){
     }
 
     q.all(promises).then(function(response){
-        console.log("###########")
-        console.log(response)
-        console.log("###########")
         for(var i=0; i<response.length;i++){
 
         }
