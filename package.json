@@ -24,6 +24,7 @@
     "path": "^0.12.7",
     "plangular": "0.0.1",
     "q": "^1.4.1",
+    "rethinkdb": "^2.2.1",
     "soundcloud": "^3.0.1",
     "stylus": "^0.53.0",
     "systemjs": "0.19.2"

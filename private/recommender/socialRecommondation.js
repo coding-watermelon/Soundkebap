@@ -10,7 +10,7 @@ module.exports = {
 const q       = require('q')
 
 function getRecommondation(user){
-  var deferred = q.defer()
+  const deferred = q.defer()
 
   deferred.resolve(["12314", "1235234"])
 

@@ -1,12 +1,25 @@
-var q   = require('q')
+'use strict'
+const config        =   require(__dirname + "/../config.json"),
+      q             =   require('q'),
+      rethinkdb     =   require('rethinkdb')
+
+let   dbConnection  = null
 
 //Build up database connection
-
-
+rethinkdb.connect({ host: config.database.host, port: config.database.port }, function(err, conn) {
+  if(err) throw err
+  console.log("Connected to RethinkDB")
+  dbConnection = conn
+})
 
 // User part
 exports.getUser = function(){
   const deferred = q.defer()
+  
+  if(!dbConnection){
+    deferred.reject('No connection to database!')
+    return deferred.promise
+  }
 
   deferred.resolve({
     "id": 183926100,
