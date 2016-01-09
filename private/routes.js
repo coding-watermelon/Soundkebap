@@ -36,14 +36,23 @@ module.exports = function(app) {
 
     })
 
+
+  /*
+    soundcloudUserId - String
+    accessToken - String
+  */
   app.route('/api/user/add')
     .post(function(req, res){
+      var soundcloudUserId = req.body.userId,
+          accessToken      = req.body.accessToken
 
       //Get the soundcloud user and add it to db
-      soundcloud.getUser('921432')
-        .then(function(user){
-          res.send(user)
+      soundcloud.getUser(soundcloudUserId, accessToken)
+        .then(db.addUser)
+        .then(function(){
+          res.status(200).send({})
         })
+        .catch(function(err){res.status(500).send(err)})
     })
 
 

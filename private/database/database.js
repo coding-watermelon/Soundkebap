@@ -6,7 +6,8 @@ const config        =   require(__dirname + "/../config.json"),
 let   dbConnection  = null
 
 //Build up database connection
-rethinkdb.connect({ host: config.database.host, port: config.database.port }, function(err, conn) {
+rethinkdb
+  .connect({ host: config.database.host, port: config.database.port }, function(err, conn) {
   if(err) throw err
   console.log("Connected to RethinkDB")
   dbConnection = conn
@@ -15,7 +16,7 @@ rethinkdb.connect({ host: config.database.host, port: config.database.port }, fu
 // User part
 exports.getUser = function(){
   const deferred = q.defer()
-  
+
   if(!dbConnection){
     deferred.reject('No connection to database!')
     return deferred.promise
@@ -49,6 +50,24 @@ exports.getUser = function(){
     "followings_count": 2,
     "subscriptions": []
   })
+
+  return deferred.promise
+}
+
+exports.addUser = function(user){
+  const deferred = q.defer()
+
+  rethinkdb
+    .db(config.database.name)
+    .table('user')
+    .insert(user)
+    .run(dbConnection, function(err, result){
+      console.log(err, result)
+      if(err)
+        deferred.reject(err)
+      else
+        deferred.resolve()
+    })
 
   return deferred.promise
 }

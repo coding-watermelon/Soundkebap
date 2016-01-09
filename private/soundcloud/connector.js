@@ -7,8 +7,6 @@ const SC        = require('node-soundcloud'),
       q         = require('q'),
       config    = require(__dirname + "/../config.json")
 
-console.log(config.soundcloud)
-
 SC.init({
   id: config.soundcloud.clientId,
   secret: config.soundcloud.clientSecret,
@@ -25,12 +23,13 @@ module.exports = {
     getTracks
 }
 
-function getUser(id){
+function getUser(id, accessToken){
   var deferred = q.defer()
   SC.get("/users/"+id, function(err, user) {
       if ( err ) {
           throw err;
       } else {
+          user.accessToken = accessToken
           deferred.resolve(user)
       }
   })
