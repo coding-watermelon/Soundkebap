@@ -6,7 +6,12 @@ const SC = require('node-soundcloud');
 const q = require('q');
 
 module.exports = {
-    getFollowers, getFollowings, getConnections, getTracksFromUser, getPlaylistsFromUser, getTracks
+    getFollowers,
+    getFollowings,
+    getConnections,
+    getTracksFromUser,
+    getPlaylistsFromUser,
+    getTracks
 }
 
 function getFollowers(id){
