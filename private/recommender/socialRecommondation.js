@@ -8,13 +8,13 @@ const module1 = require(__dirname + '/modules/module1.js'),
       q = require('q')
 
 module.exports = {
-      getRecommondation
+      getRecommendation
 }
 
 function getRecommendation(user){
   const deferred = q.defer()
 
-  module1.getRecommondation(user).then(function(response){
+  module1.getRecommendation(user).then(function(response){
     recommendation = response
   })
 
