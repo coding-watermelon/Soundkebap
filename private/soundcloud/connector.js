@@ -8,8 +8,8 @@ const SC        = require('node-soundcloud'),
       config    = require(__dirname + "/../config.json")
 
 SC.init({
-  id: config.soundcloud.clientId,
-  secret: config.soundcloud.clientSecret,
+  id: config.soundcloud["client-id"],
+  secret: config.soundcloud["client-secret"],
   accessToken: config.soundcloud.accessToken
 });
 
