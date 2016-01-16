@@ -14,13 +14,7 @@ module.exports = {
 function getRecommendation(user){
   var deferred = q.defer()
 
-  soundcloud.getConnections(user.id).then(function(connections){
-    soundcloud.getTracks(connections).then(function(tracks){
-      deferred.resolve(tracks)
 
-    })
-
-  })
 
   return deferred.promise
 

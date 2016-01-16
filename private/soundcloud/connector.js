@@ -20,7 +20,8 @@ module.exports = {
     getConnections,
     getTracksFromUser,
     getPlaylistsFromUser,
-    getTracks
+    getTracks,
+    getFavoritesFromUser
 }
 
 function getUser(id, accessToken){
@@ -64,22 +65,24 @@ function getConnections(id){
     var deferred = q.defer()
     var promises = []
 
-
     promises.push(getFollowers(id))
     promises.push(getFollowings(id))
 
-    q.all(promises).spread(function(followers, followings){
-        var follower = []
-        for(var i=0;i<followers.length;i++){
-            follower.push(followers[i].id)
+    q.all(promises).then(function(response){
+        var uniqueConnections = {}
+
+        //insert into object to remove duplicates
+        for(var i=0;i<response.length;i++){
+            for(var j=0;j<response[i].length;j++){
+                uniqueConnections[(response[i][j].id)] = true
+            }
+        }
+        var connections = []
+        for (var key in uniqueConnections) {
+            connections.push(key)
         }
 
-        var following = []
-        for(var i=0;i<followings.length;i++){
-            following.push(followings[i].id)
-        }
-
-        deferred.resolve({"follower": follower, "following": following})
+        deferred.resolve(connections)
     })
 
     return deferred.promise
@@ -95,7 +98,7 @@ function getTracksFromUser(id){
             for(var i=0; i<response.length;i++){
                 tracks.push(response[i].id)
             }
-            deferred.resolve(tracks)
+            deferred.resolve({"user_id":id,"tracks":tracks})
         }
     })
     return deferred.promise
@@ -107,35 +110,60 @@ function getPlaylistsFromUser(id){
         if ( err ) {
             throw err;
         } else {
-            var tracks = []
+            var playlists = {"user_id":id,"playlists": []}
             for(var i=0; i< response.length;i++){
+                var playlist = []
                 for(var j=0;j<response[i].tracks.length;j++){
-                    tracks.push(response[i].tracks[j].id)
+                    playlist.push(response[i].tracks[j].id)
                 }
+                playlists.playlists.push(playlist)
             }
-            deferred.resolve(tracks)
+            deferred.resolve(playlists)
         }
     })
     return deferred.promise
 }
 
-function getTracks(connections){
+function getFavoritesFromUser(id){
+    var deferred = q.defer()
+    SC.get("/users/"+id+"/favorites", function(err, response) {
+        if ( err ) {
+            throw err;
+        } else {
+            var tracks = []
+            for(var i=0; i< response.length;i++){
+                tracks.push(response[i].id)
+            }
+            deferred.resolve({"user_id":id,"favorites":tracks})
+        }
+    })
+    return deferred.promise
+}
+
+function getTracks(users){
     var deferred = q.defer()
     var promises = []
-    var users = connections.follower.concat(connections.following)
 
     for(var i=0;i<users.length;i++){
         var id = users[i]
         promises.push(getTracksFromUser(id))
         promises.push(getPlaylistsFromUser(id))
+        promises.push(getFavoritesFromUser(id))
     }
 
-    q.all(promises).then(function(response){
-        var tracks = []
-        for(var i=0; i<response.length;i++){
-            tracks = tracks.concat(response[i])
+    q.allSettled(promises).then(function(response){
+        var recommendedTracks = {"tracks": [], "playlists": [], "favorites": []}
+
+        for(var i=0;i<response.length;i++){
+            if(response[i].value.hasOwnProperty("tracks"))
+                recommendedTracks.tracks.push(response[i].value)
+            if(response[i].value.hasOwnProperty("playlists"))
+                recommendedTracks.playlists.push(response[i].value)
+            if(response[i].value.hasOwnProperty("favorites"))
+                recommendedTracks.favorites.push(response[i].value)
         }
-        deferred.resolve(tracks)
+
+        deferred.resolve(recommendedTracks)
     })
 
     return deferred.promise
