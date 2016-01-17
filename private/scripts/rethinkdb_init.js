@@ -1,29 +1,37 @@
+'use strict'
+
 //Requires
 var rethinkdb = require('rethinkdb'),
     q         = require('q'),
-    config    = require(__dirname + "/private/config.json")
+    config    = require(__dirname + "/../config.json")
 
 //Environment Variables
 const port = config.database.port,
       host = config.database.host,
       databaseName = config.database.name
 
-rethinkdb.connect({ host: host, port: port }, function(err, conn) {
-  if(err) throw err
-  console.log("Connected to RethinkDB Server")
-  createDatabase(conn)
-    .then(createUsersTable)
-    .then(function(){return createHistoryTable(conn)})
-    .then(function(){return createTrackTable(conn)})
-    .then(function(){
-      console.log('Finished initialization!')
-      process.exit(1)
-    })
-    .catch(function(err){
-      console.log(err.message)
-      process.exit(1)
-    })
-})
+exports.init = function(){
+  const deferred = q.defer()
+
+  rethinkdb.connect({ host: host, port: port }, function(err, conn) {
+    if(err) throw err
+    console.log("Connected to RethinkDB Server")
+    createDatabase(conn)
+      .then(createUsersTable)
+      .then(function(){return createHistoryTable(conn)})
+      .then(function(){return createTrackTable(conn)})
+      .then(function(){return createPlaylistTable(conn)})
+      .then(function(){
+        console.log('Finished database-initialization!')
+        deferred.resolve()
+      })
+      .catch(function(err){
+        deferred.reject(err.message)
+      })
+  })
+
+  return deferred.promise
+}
 
 function createDatabase(connection){
   var deferred = q.defer()
@@ -42,7 +50,7 @@ function createDatabase(connection){
 
 function createUsersTable(conn){
   var deferred = q.defer()
-  rethinkdb.db(databaseName).tableCreate('user', {primaryKey: 'userId'}).run(conn, function(err, conn){
+  rethinkdb.db(databaseName).tableCreate('user', {primaryKey: 'id'}).run(conn, function(err, conn){
     if(err){
       deferred.reject(err)
       return
@@ -71,7 +79,22 @@ function createHistoryTable(conn){
 function createTrackTable(conn){
   var deferred = q.defer()
 
-  rethinkdb.db(databaseName).tableCreate('track', {primaryKey: 'trackId'}).run(conn, function(err, conn){
+  rethinkdb.db(databaseName).tableCreate('track', {primaryKey: 'id'}).run(conn, function(err, conn){
+    if(err){
+      deferred.reject(err)
+      return
+    }
+    console.log("Created track Table")
+    deferred.resolve(conn)
+  })
+
+  return deferred.promise
+}
+
+function createPlaylistTable(conn){
+  const deferred = q.defer()
+
+  rethinkdb.db(databaseName).tableCreate('playlists', {primaryKey: 'id'}).run(conn, function(err, conn){
     if(err){
       deferred.reject(err)
       return
