@@ -11,7 +11,7 @@ module.exports = {
     getNormalizedTracks
 }
 
-function getNormalizedTracks(tracks){
+function getNormalizedTracks(tracks, factor){
     var deferred = q.defer()
 
     var sortedTracks = []
@@ -25,6 +25,7 @@ function getNormalizedTracks(tracks){
     for(var i=0;i<sortedTracks.length;i++){
         var id = sortedTracks[i][0]
         var value = sortedTracks[i][1] / maxCount
+        value *= factor
         normalizedTracks.push({"id":id,"value":value})
     }
 

@@ -36,7 +36,7 @@ function getRecommendation(playlists){
         }
     }
 
-    helperModule.getNormalizedTracks(tracks).then(function(normalizedTracks){
+    helperModule.getNormalizedTracks(tracks, 1).then(function(normalizedTracks){
         deferred.resolve(normalizedTracks)
     })
 
