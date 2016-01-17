@@ -21,7 +21,8 @@ module.exports = {
     getTracksFromUser,
     getPlaylistsFromUser,
     getTracks,
-    getFavoritesFromUser
+    getFavoritesFromUser,
+    getPlaylistByid
 }
 
 function getUser(id, accessToken){
@@ -167,4 +168,17 @@ function getTracks(users){
     })
 
     return deferred.promise
+}
+
+function getPlaylistByid(id){
+  const deferred = q.defer()
+  SC.get("/playlists/"+id, function(err, response) {
+      if ( err ) {
+          throw err;
+      } else {
+          console.log(response)
+          deferred.resolve(response)
+      }
+  })
+  return deferred.promise
 }

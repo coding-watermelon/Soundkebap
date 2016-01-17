@@ -8,6 +8,7 @@ var stylus        = require('stylus'),
     q             = require('q'),
     port          = 7070
 
+const dbInit      = require(__dirname + '/private/scripts/rethinkdb_init.js')
 
 // --- app configuration
 app.use(bodyParser.urlencoded({  extended: true }))
@@ -16,6 +17,11 @@ app.use(stylus.middleware(path.join(__dirname, 'src')))
 
 app.use( express.static(__dirname + '/src') )
 app.use( express.static(__dirname + '/node_modules') )
+
+//Database initialization
+dbInit.init()
+  .catch(function(err){console.log(err)})
+
 
 // --- route initialization
 require('./private/routes.js')(app)

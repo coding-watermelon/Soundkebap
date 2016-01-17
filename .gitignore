@@ -3,6 +3,7 @@ node_modules
 src/**/*.js
 src/**/*.js.map
 hero_tutorial
+hero1
 rethinkdb_data/
 
 private/config.json
