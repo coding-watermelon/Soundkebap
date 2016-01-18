@@ -94,12 +94,12 @@ function createTrackTable(conn){
 function createPlaylistTable(conn){
   const deferred = q.defer()
 
-  rethinkdb.db(databaseName).tableCreate('playlists', {primaryKey: 'id'}).run(conn, function(err, conn){
+  rethinkdb.db(databaseName).tableCreate('playlist', {primaryKey: 'id'}).run(conn, function(err, conn){
     if(err){
       deferred.reject(err)
       return
     }
-    console.log("Created track Table")
+    console.log("Created playlist Table")
     deferred.resolve(conn)
   })
 

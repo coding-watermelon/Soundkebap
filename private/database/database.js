@@ -13,8 +13,15 @@ rethinkdb
   dbConnection = conn
 })
 
+
+module.exports = {
+  getUser,
+  addUser,
+  addTrack,
+  addPlaylist,
+}
 // User part
-exports.getUser = function(){
+function getUser(){
   const deferred = q.defer()
 
   if(!dbConnection){
@@ -54,7 +61,7 @@ exports.getUser = function(){
   return deferred.promise
 }
 
-exports.addUser = function(user){
+function addUser(user){
   const deferred = q.defer()
 
   rethinkdb
@@ -62,7 +69,44 @@ exports.addUser = function(user){
     .table('user')
     .insert(user)
     .run(dbConnection, function(err, result){
-      console.log(err, result)
+      if(err)
+        deferred.reject(err)
+      else
+        deferred.resolve()
+    })
+
+  return deferred.promise
+}
+
+// ####################### Tracks
+
+function addTrack (track) {
+  const deferred = q.defer()
+
+  rethinkdb
+    .db(config.database.name)
+    .table('track')
+    .insert(track)
+    .run(dbConnection, function(err, result){
+      if(err)
+        deferred.reject(err)
+      else
+        deferred.resolve()
+    })
+
+  return deferred.promise
+}
+
+// ###################### playlists
+
+function addPlaylist (playlist) {
+  const deferred = q.defer()
+
+  rethinkdb
+    .db(config.database.name)
+    .table('playlist')
+    .insert(playlist)
+    .run(dbConnection, function(err, result){
       if(err)
         deferred.reject(err)
       else

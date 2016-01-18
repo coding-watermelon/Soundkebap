@@ -174,9 +174,8 @@ function getPlaylistByid(id){
   const deferred = q.defer()
   SC.get("/playlists/"+id, function(err, response) {
       if ( err ) {
-          throw err;
+          deferred.reject(err)
       } else {
-          console.log(response)
           deferred.resolve(response)
       }
   })
