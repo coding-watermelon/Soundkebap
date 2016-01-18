@@ -98,7 +98,7 @@ function getRecommendation(user, otherUsers){
         }
     }
 
-    helperModule.getNormalizedTracks(recommendedTracks, 1).then(function(normalizedTracks){
+    helperModule.getNormalizedTracks(recommendedTracks, 3).then(function(normalizedTracks){
         deferred.resolve(normalizedTracks)
     })
 
