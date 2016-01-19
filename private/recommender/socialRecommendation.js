@@ -33,10 +33,10 @@ function collectValuesFromModules(user, tracks){
     var deferred = q.defer()
     var promises = []
 
-    promises.push(module1.getRecommendation(tracks.playlists))
-    promises.push(module2.getRecommendation(tracks.favorites))
-    promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks))
-    promises.push(module4.getRecommendation(user.playlists, tracks.playlists))
+    promises.push(module1.getRecommendation(tracks.playlists),1)
+    promises.push(module2.getRecommendation(tracks.favorites),1)
+    promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks),1)
+    promises.push(module4.getRecommendation(user.playlists, tracks.playlists),3)
 
     q.all(promises).then(function(response){
         var tracks = {}

@@ -12,7 +12,7 @@ module.exports = {
     getRecommendation
 }
 
-function getRecommendation(favorites, playlists, tracks){
+function getRecommendation(favorites, playlists, tracks, factor){
     var deferred = q.defer()
 
     var userSongs = {}
@@ -91,7 +91,7 @@ function getRecommendation(favorites, playlists, tracks){
         }
     }
 
-    helperModule.getNormalizedTracks(recommendedTracks, 1).then(function(normalizedTracks){
+    helperModule.getNormalizedTracks(recommendedTracks, factor).then(function(normalizedTracks){
         deferred.resolve(normalizedTracks)
     })
 
