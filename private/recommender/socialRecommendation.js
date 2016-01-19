@@ -36,6 +36,7 @@ function collectValuesFromModules(user, tracks){
     promises.push(module1.getRecommendation(tracks.playlists))
     promises.push(module2.getRecommendation(tracks.favorites))
     promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks))
+    promises.push(module4.getRecommendation(user.playlists, tracks.playlists))
 
     q.all(promises).then(function(response){
         var tracks = {}

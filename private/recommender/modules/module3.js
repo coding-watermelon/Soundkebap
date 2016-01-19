@@ -1,6 +1,6 @@
 'use strict'
 /*
- Module gets own playlists and favorites and tracks from other users and returns songs from favorite artists
+ Module gets own playlists and favorites and tracks from other users and returns top 10 songs from favorite artists
 
  */
 const soundcloud = require(__dirname + '/../../soundcloud/connector.js')
@@ -78,7 +78,7 @@ function getRecommendation(favorites, playlists, tracks){
         if(similarities.hasOwnProperty(userId) && similarities[userId]>0){
             var value = similarities[userId]
 
-            for(var j=0;j<tracks[i].tracks.length;j++){
+            for(var j=0;j<tracks[i].tracks.length || j<10;j++){
                 var trackId = tracks[i].tracks[j]
 
                 if(recommendedTracks.hasOwnProperty(trackId)){
