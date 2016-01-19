@@ -5,7 +5,7 @@ const q          = require('q')
 
 module.exports = {start}
 
-start(16,1000)
+start(1,1000)
 
 function start(startId, endId){
   const deferred = q.defer()
@@ -57,8 +57,9 @@ function getPlaylist(id){
     .catch(function(err){
       if(err[0].error_message === '404 - Not Found')
         deferred.reject('next')
-      else
+      else{
         deferred.reject(err)
+      }
 
     })
 
