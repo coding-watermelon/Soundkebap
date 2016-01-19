@@ -5,5 +5,6 @@ src/**/*.js.map
 hero_tutorial
 hero1
 rethinkdb_data/
+./**/.DS_Store
 
 private/config.json
