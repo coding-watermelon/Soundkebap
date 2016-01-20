@@ -43,7 +43,7 @@ function getUnknownUser(id, maxId){
   var deferred = q.defer()
   SC.get("/users/"+id, function(err, user) {
       if ( err ) {
-          throw err;
+          deferred.resolve({"user":{},"maxId":maxId})
       } else {
           deferred.resolve({"user":user,"maxId":maxId})
       }

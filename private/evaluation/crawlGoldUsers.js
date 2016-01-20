@@ -32,7 +32,7 @@ function addUser(id, counter){
 function getIds(count){
     let deferred = q.defer()
     let promises = []
-    let maxId = 10000000
+    let maxId = 200791700
 
     for(let i=0;i<count;i++){
         promises.push(getUser(maxId))
@@ -52,7 +52,7 @@ function getIds(count){
 }
 
 function getUser(maxId){
-    let randomId = Math.floor(Math.random()*maxId)
+    let randomId = Math.floor(Math.random()*maxId)+1
 
     return q.all([
         soundcloud.getUnknownUser(randomId, maxId)
@@ -64,7 +64,6 @@ function getUser(maxId){
         let maxId = response[0].maxId
 
         if((user.followers_count + user.followings_count) >= minConnections && user.playlist_count >= minPlaylists){
-            console.log("Yeah")
             return user.id
         }
         else{
@@ -79,22 +78,19 @@ function crawlUserSample(count){
     let promises = []
 
     getIds(count).then(function(ids){
-        for(let i=0;i<count;i++){
-            promises.push(addUser(ids[i],i))
-        }
-
-        q.allSettled(promises).then(function(){
+        //for(let i=0;i<count;i++){
+        //    promises.push(addUser(ids[i],i))
+        //}
+        //
+        //q.allSettled(promises).then(function(){
             deferred.resolve("crawling completed")
-        })
+        //})
 
     })
 
     return deferred.promise
 }
 
-//crawlUserSample(1).then(function(response){
-//    console.log(response)
-//})
-getIds(5).then(function(ids){
-    console.log(ids)
+crawlUserSample(10).then(function(response){
+    console.log(response)
 })
