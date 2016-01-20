@@ -15,6 +15,7 @@ SC.init({
 
 module.exports = {
     getUser,
+    getUnknownUser,
     getFollowers,
     getFollowings,
     getConnections,
@@ -32,6 +33,18 @@ function getUser(id, accessToken){
           throw err;
       } else {
           user.accessToken = accessToken
+          deferred.resolve(user)
+      }
+  })
+  return deferred.promise
+}
+
+function getUnknownUser(id){
+  var deferred = q.defer()
+  SC.get("/users/"+id, function(err, user) {
+      if ( err ) {
+          throw err;
+      } else {
           deferred.resolve(user)
       }
   })
