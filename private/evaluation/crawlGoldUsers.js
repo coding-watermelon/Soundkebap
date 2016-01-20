@@ -40,6 +40,7 @@ function getIds(count){
 
     q.allSettled(promises).then(function(response){
         let ids = []
+
         for(let i=0;i<response.length;i++){
             ids.push(response[i].value)
         }
@@ -51,29 +52,26 @@ function getIds(count){
 }
 
 function getUser(maxId){
-    let deferred = q.defer()
     let randomId = Math.floor(Math.random()*maxId)
 
-    let minConnections = 3
-    let minPlaylists = 1
+    return q.all([
+        soundcloud.getUnknownUser(randomId, maxId)
+    ]).then(function(response){
+        let minConnections = 3
+        let minPlaylists = 1
 
-    soundcloud.getUnknownUser(randomId).then(function(user){
-        console.log(user)
+        let user = response[0].user
+        let maxId = response[0].maxId
+
         if((user.followers_count + user.followings_count) >= minConnections && user.playlist_count >= minPlaylists){
-            deferred.resolve(user.id)
+            console.log("Yeah")
+            return user.id
         }
         else{
-            //let deferredUser = q.defer()
-            //
-            //getUser(maxId).then(function(user){
-            //    deferredUser.resolve(user.id)
-            //})
-            //
-            //deferred.resolve(deferredUser.promise)
+            return getUser(maxId)
         }
     })
 
-    return deferred.promise
 }
 
 function crawlUserSample(count){
@@ -97,6 +95,6 @@ function crawlUserSample(count){
 //crawlUserSample(1).then(function(response){
 //    console.log(response)
 //})
-getIds(1).then(function(ids){
+getIds(5).then(function(ids){
     console.log(ids)
 })

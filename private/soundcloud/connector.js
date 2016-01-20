@@ -39,13 +39,13 @@ function getUser(id, accessToken){
   return deferred.promise
 }
 
-function getUnknownUser(id){
+function getUnknownUser(id, maxId){
   var deferred = q.defer()
   SC.get("/users/"+id, function(err, user) {
       if ( err ) {
           throw err;
       } else {
-          deferred.resolve(user)
+          deferred.resolve({"user":user,"maxId":maxId})
       }
   })
   return deferred.promise
