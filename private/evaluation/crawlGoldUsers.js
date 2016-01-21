@@ -1,7 +1,6 @@
 'use strict'
 
 const soundcloud    = require(__dirname + '/../soundcloud/connector.js'),
-      recommender   = require(__dirname + '/../recommender/recommender.js'),
       db            = require(__dirname + '/../database/database.js'),
       q             = require('q')
 
@@ -106,6 +105,6 @@ function crawlUserSample(count){
     return deferred.promise
 }
 
-crawlUserSample(20).then(function(response){
-    console.log(response)
-})
+//crawlUserSample(20).then(function(response){
+//    console.log(response)
+//})
