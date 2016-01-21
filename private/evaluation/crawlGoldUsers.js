@@ -20,7 +20,7 @@ function addUser(id, counter){
             let goldUser = {"id":counter, "user": user, "otherUsers":otherUsers}
 
             db.addGoldUser(goldUser).then(function(response){
-                console.log("============= added user =============")
+                console.log("============= added user "+counter+" =============")
                 deferred.resolve(response)
             })
 
@@ -80,17 +80,26 @@ function getUser(maxId){
 
 function crawlUserSample(count){
     let deferred = q.defer()
-    let promises = []
 
     getIds(count).then(function(ids){
         console.log(ids)
-        for(let i=0;i<count;i++){
-            promises.push(addUser(ids[i],i))
+        let i=0
+
+        function callAddUser(id,i,count){
+            console.log("call add User "+i)
+            addUser(id,i)
+                .then(function(){
+                    if(i<count-1){
+                        i++
+                        callAddUser(id,i,count)
+                    }
+                    else{
+                        deferred.resolve("crawling completed")
+                    }
+                })
         }
 
-        q.allSettled(promises).then(function(){
-            deferred.resolve("crawling completed")
-        })
+        callAddUser(ids[i], i,count)
 
     })
 

@@ -157,7 +157,7 @@ function addGoldUser(user){
 
   rethinkdb
       .db(config.database.name)
-      .table('testUsers')
+      .table('goldUsers')
       .insert(user)
       .run(dbConnection, function(err, result){
         if(err)

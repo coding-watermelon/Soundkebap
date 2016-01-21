@@ -109,7 +109,7 @@ function getTracksFromUser(id){
     SC.get("/users/"+id+"/tracks", function(err, response) {
         if ( err ) {
             console.log("error by get tracks and id: "+id)
-            deferred.resolve([])
+            deferred.reject(err)
         } else {
             var tracks = []
             for(var i=0; i<response.length;i++){
@@ -126,7 +126,7 @@ function getPlaylistsFromUser(id){
     SC.get("/users/"+id+"/playlists", function(err, response) {
         if ( err ) {
             console.log("error by get playlists and id: "+id)
-            deferred.resolve([])
+            deferred.reject(err)
         } else {
             var playlists = {"user_id":id,"playlists": []}
             for(var i=0; i< response.length;i++){
@@ -147,7 +147,7 @@ function getFavoritesFromUser(id){
     SC.get("/users/"+id+"/favorites", function(err, response) {
         if ( err ) {
             console.log("error by get favorites and id: "+id)
-            deferred.resolve([])
+            deferred.reject(err)
         } else {
             var tracks = []
             for(var i=0; i< response.length;i++){
@@ -174,11 +174,11 @@ function getTracks(users){
         var recommendedTracks = {"tracks": [], "playlists": [], "favorites": []}
 
         for(var i=0;i<response.length;i++){
-            if(response[i].value.hasOwnProperty("tracks"))
+            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("tracks"))
                 recommendedTracks.tracks.push(response[i].value)
-            if(response[i].value.hasOwnProperty("playlists"))
+            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("playlists"))
                 recommendedTracks.playlists.push(response[i].value)
-            if(response[i].value.hasOwnProperty("favorites"))
+            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("favorites"))
                 recommendedTracks.favorites.push(response[i].value)
         }
 
