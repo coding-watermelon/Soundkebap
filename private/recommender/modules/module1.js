@@ -21,7 +21,6 @@ function getRecommendation(playlists, factor){
         for(var j=0;j<playlists[i].playlists.length;j++){
 
             var playlist = playlists[i].playlists[j]
-
             for(var k=0;k<playlist.length;k++){
 
                 var trackId = playlist[k]

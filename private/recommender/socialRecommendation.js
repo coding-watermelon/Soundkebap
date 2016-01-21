@@ -1,19 +1,20 @@
 'use strict'
 /*
-Short Module description
+ Short Module description
 
-*/
+ */
 
 const module1 = require(__dirname + '/modules/module1.js'),
-      module2 = require(__dirname + '/modules/module2.js'),
-      module3 = require(__dirname + '/modules/module3.js'),
-      module4 = require(__dirname + '/modules/module4.js'),
-      soundcloud = require(__dirname + '/../soundcloud/connector.js'),
-      SC = require('node-soundcloud'),
-      q = require('q')
+    module2 = require(__dirname + '/modules/module2.js'),
+    module3 = require(__dirname + '/modules/module3.js'),
+    module4 = require(__dirname + '/modules/module4.js'),
+    soundcloud = require(__dirname + '/../soundcloud/connector.js'),
+    SC = require('node-soundcloud'),
+    q = require('q')
 
 module.exports = {
-      getRecommendation
+    getRecommendation,
+    collectValuesFromModules
 }
 
 function getTracksFromOtherUsers(id){
@@ -29,14 +30,14 @@ function getTracksFromOtherUsers(id){
     return deferred.promise
 }
 
-function collectValuesFromModules(user, tracks){
+function collectValuesFromModules(user, tracks, topSongs){
     var deferred = q.defer()
     var promises = []
 
-    promises.push(module1.getRecommendation(tracks.playlists),1)
-    promises.push(module2.getRecommendation(tracks.favorites),1)
-    promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks),1)
-    promises.push(module4.getRecommendation(user.playlists, tracks.playlists),3)
+    promises.push(module1.getRecommendation(tracks.playlists,1))
+    promises.push(module2.getRecommendation(tracks.favorites,1))
+    promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks,1))
+    promises.push(module4.getRecommendation(user.playlists, tracks.playlists,3))
 
     q.all(promises).then(function(response){
         var tracks = {}
@@ -62,7 +63,7 @@ function collectValuesFromModules(user, tracks){
         sortedTracks.sort(function(a, b) {return b[1] - a[1]})
 
         var trackIds = sortedTracks.map(function ( track ) { return track[0] })
-        trackIds = trackIds.slice(0,20)
+        trackIds = trackIds.slice(0,topSongs)
 
         deferred.resolve(trackIds)
     })
@@ -80,7 +81,7 @@ function getRecommendation(user){
 
     q.all(promises).spread(function(user, tracks){
 
-        collectValuesFromModules(user, tracks).then(function(rankedTracks){
+        collectValuesFromModules(user, tracks,20).then(function(rankedTracks){
             deferred.resolve(rankedTracks)
         })
 
@@ -89,33 +90,33 @@ function getRecommendation(user){
     return deferred.promise
 }
 
-  //getRecommendation({ id: 131842115,
-  //      kind: 'user',
-  //      permalink: 'sebastian-rehfeldt-1',
-  //      username: 'Sebastian Rehfeldt',
-  //      last_modified: '2015/10/14 13:21:49 +0000',
-  //      uri: 'https://api.soundcloud.com/users/131842115',
-  //      permalink_url: 'http://soundcloud.com/sebastian-rehfeldt-1',
-  //      avatar_url: 'https://i1.sndcdn.com/avatars-000123963373-p1mmtc-large.jpg',
-  //      country: null,
-  //      first_name: 'Sebastian',
-  //      last_name: 'Rehfeldt',
-  //      full_name: 'Sebastian Rehfeldt',
-  //      description: null,
-  //      city: null,
-  //      discogs_name: null,
-  //      myspace_name: null,
-  //      website: null,
-  //      website_title: null,
-  //      online: false,
-  //      track_count: 0,
-  //      playlist_count: 1,
-  //      plan: 'Free',
-  //      public_favorites_count: 3,
-  //      followers_count: 6,
-  //      followings_count: 17,
-  //      subscriptions: [] }
-  //).then(function(response){
-  //        console.log("\nFinal Recommendation\n======================\n")
-  //        console.log(response)
-  //    })
+//getRecommendation({ id: 131842115,
+//      kind: 'user',
+//      permalink: 'sebastian-rehfeldt-1',
+//      username: 'Sebastian Rehfeldt',
+//      last_modified: '2015/10/14 13:21:49 +0000',
+//      uri: 'https://api.soundcloud.com/users/131842115',
+//      permalink_url: 'http://soundcloud.com/sebastian-rehfeldt-1',
+//      avatar_url: 'https://i1.sndcdn.com/avatars-000123963373-p1mmtc-large.jpg',
+//      country: null,
+//      first_name: 'Sebastian',
+//      last_name: 'Rehfeldt',
+//      full_name: 'Sebastian Rehfeldt',
+//      description: null,
+//      city: null,
+//      discogs_name: null,
+//      myspace_name: null,
+//      website: null,
+//      website_title: null,
+//      online: false,
+//      track_count: 0,
+//      playlist_count: 1,
+//      plan: 'Free',
+//      public_favorites_count: 3,
+//      followers_count: 6,
+//      followings_count: 17,
+//      subscriptions: [] }
+//).then(function(response){
+//        console.log("\nFinal Recommendation\n======================\n")
+//        console.log(response)
+//    })

@@ -83,7 +83,7 @@ function getRecommendation(user, otherUsers, factor){
     for(var i=0;i<otherUserTracks.length;i++){
 
         var userId = otherUserTracks[i].user_id
-        if(similarities.hasOwnProperty(userId) && similarities[userId]>0){
+        if(similarities.hasOwnProperty(userId)){
 
             for(var track in otherUserTracks[i].tracks){
                 var value = similarities[userId] + otherUserTracks[i].tracks[track]
