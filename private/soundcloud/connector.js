@@ -55,7 +55,7 @@ function getFollowers(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/followers", function(err, response) {
         if ( err ) {
-            throw err;
+            deferred.resolve([])
         } else {
             deferred.resolve(response.collection)
         }
@@ -67,7 +67,7 @@ function getFollowings(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/followings", function(err, response) {
         if ( err ) {
-            throw err;
+            deferred.resolve([])
         } else {
             deferred.resolve(response.collection)
         }
@@ -106,7 +106,7 @@ function getTracksFromUser(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/tracks", function(err, response) {
         if ( err ) {
-            throw err;
+            deferred.resolve([])
         } else {
             var tracks = []
             for(var i=0; i<response.length;i++){
@@ -122,7 +122,7 @@ function getPlaylistsFromUser(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/playlists", function(err, response) {
         if ( err ) {
-            throw err;
+            deferred.resolve([])
         } else {
             var playlists = {"user_id":id,"playlists": []}
             for(var i=0; i< response.length;i++){
@@ -142,7 +142,7 @@ function getFavoritesFromUser(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/favorites", function(err, response) {
         if ( err ) {
-            throw err;
+            deferred.resolve([])
         } else {
             var tracks = []
             for(var i=0; i< response.length;i++){

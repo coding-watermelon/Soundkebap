@@ -8,20 +8,22 @@ const soundcloud    = require(__dirname + '/../soundcloud/connector.js'),
 function addUser(id, counter){
 
     var deferred = q.defer()
-    var promises = []
 
-
-    promises.push(soundcloud.getTracks([id]))
     soundcloud.getConnections(id).then(function(connections) {
+        var promises = []
+
+        promises.push(soundcloud.getTracks([id]))
         promises.push(soundcloud.getTracks(connections))
-    })
 
-    q.all(promises).spread(function(user, otherUsers){
+        q.all(promises).spread(function(user, otherUsers){
 
-        let goldUser = {"id":counter, "user": user, "otherUsers":otherUsers}
+            let goldUser = {"id":counter, "user": user, "otherUsers":otherUsers}
 
-        db.addGoldUser(goldUser).then(function(response){
-            deferred.resolve(response)
+            db.addGoldUser(goldUser).then(function(response){
+                console.log("============= added user =============")
+                deferred.resolve(response)
+            })
+
         })
 
     })
@@ -59,11 +61,14 @@ function getUser(maxId){
     ]).then(function(response){
         let minConnections = 3
         let minPlaylists = 1
+        let maxConnections = 50
 
         let user = response[0].user
         let maxId = response[0].maxId
+        let connections = (user.followers_count + user.followings_count)
 
-        if((user.followers_count + user.followings_count) >= minConnections && user.playlist_count >= minPlaylists){
+        if(connections >= minConnections && connections < maxConnections && user.playlist_count >= minPlaylists){
+            console.log(connections)
             return user.id
         }
         else{
@@ -78,19 +83,20 @@ function crawlUserSample(count){
     let promises = []
 
     getIds(count).then(function(ids){
-        //for(let i=0;i<count;i++){
-        //    promises.push(addUser(ids[i],i))
-        //}
-        //
-        //q.allSettled(promises).then(function(){
+        console.log(ids)
+        for(let i=0;i<count;i++){
+            promises.push(addUser(ids[i-18],i))
+        }
+
+        q.allSettled(promises).then(function(){
             deferred.resolve("crawling completed")
-        //})
+        })
 
     })
 
     return deferred.promise
 }
 
-crawlUserSample(10).then(function(response){
+crawlUserSample(20).then(function(response){
     console.log(response)
 })
