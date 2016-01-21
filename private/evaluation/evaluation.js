@@ -11,7 +11,7 @@ function evaluateUser(user){
     const favoritesLength = user.user.favorites[0].favorites.length
     const tracksLength = user.user.tracks[0].tracks.length
 
-    const maxFolds = 5
+    const maxFolds = 5.0
     let iteration = 0
 
     let precision = 0.0
@@ -25,7 +25,7 @@ function evaluateUser(user){
         let availableTracks = {}
 
         for(let i=0;i<favoritesLength;i++){
-            if(i<(iteration*(favoritesLength/maxFolds)) || i > ((iteration+1)*(favoritesLength/maxFolds))){
+            if(i<(iteration*Math.floor(favoritesLength/maxFolds)) || i > ((iteration+1)*Math.floor(favoritesLength/maxFolds))){
                 favorites.push(user.user.favorites[0].favorites[i])
             }
             else{
@@ -35,7 +35,7 @@ function evaluateUser(user){
         availableTracks.favorites = [{"user_id":userId,"favorites":favorites}]
 
         for(let i=0;i<tracksLength;i++){
-            if(i<(iteration*(tracksLength/maxFolds)) || i > ((iteration+1)*(tracksLength/maxFolds))){
+            if(i<(iteration*Math.floor(tracksLength/maxFolds)) || i > ((iteration+1)*Math.floor(tracksLength/maxFolds))){
                 tracks.push(user.user.tracks[0].tracks[i])
             }
             else{
@@ -51,7 +51,7 @@ function evaluateUser(user){
                 let playlist = user.user.playlists[i].playlists[j]
                 for(let k=0;k<playlist.length;k++){
 
-                    if(k<(iteration*(playlist.length/maxFolds)) || k > ((iteration+1)*(playlist.length/maxFolds))){
+                    if(k<(iteration*Math.floor(playlist.length/maxFolds)) || k > ((iteration+1)*Math.floor(playlist.length/maxFolds))){
                         songs.push(playlist[k])
                     }
                     else{
@@ -64,9 +64,6 @@ function evaluateUser(user){
         availableTracks.playlists = [{"user_id":userId,"playlists":playlists}]
 
         recommender.collectValuesFromModules(availableTracks,user.otherUsers,removedTracks.length).then(function(recommendedTracks){
-            console.log("============= YEAH =============")
-            console.log(recommendedTracks)
-            console.log(removedTracks)
 
             let commonIds = 0
 
@@ -79,7 +76,6 @@ function evaluateUser(user){
             }
             precision += (commonIds/recommendedTracks.length)
             recall += (commonIds/(removedTracks.length*maxFolds))
-            console.log({"precision":precision,"recall":recall})
 
             if(iteration<(maxFolds-1)){
                 iteration ++
