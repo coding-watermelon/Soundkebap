@@ -65,7 +65,7 @@ function getUser(maxId){
 
         let user = response[0].user
         let maxId = response[0].maxId
-        let connections = (user.followers_count + user.followings_count)
+        let connections = user.followers_count + user.followings_count
 
         if(connections >= minConnections && connections < maxConnections && user.playlist_count >= minPlaylists){
             console.log(connections)
@@ -85,7 +85,7 @@ function crawlUserSample(count){
     getIds(count).then(function(ids){
         console.log(ids)
         for(let i=0;i<count;i++){
-            promises.push(addUser(ids[i-18],i))
+            promises.push(addUser(ids[i],i))
         }
 
         q.allSettled(promises).then(function(){

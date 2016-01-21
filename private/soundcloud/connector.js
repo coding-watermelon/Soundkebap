@@ -55,6 +55,7 @@ function getFollowers(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/followers", function(err, response) {
         if ( err ) {
+            console.log("error by get followers and id: "+id)
             deferred.resolve([])
         } else {
             deferred.resolve(response.collection)
@@ -67,6 +68,7 @@ function getFollowings(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/followings", function(err, response) {
         if ( err ) {
+            console.log("error by get followings and id: "+id)
             deferred.resolve([])
         } else {
             deferred.resolve(response.collection)
@@ -106,6 +108,7 @@ function getTracksFromUser(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/tracks", function(err, response) {
         if ( err ) {
+            console.log("error by get tracks and id: "+id)
             deferred.resolve([])
         } else {
             var tracks = []
@@ -122,6 +125,7 @@ function getPlaylistsFromUser(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/playlists", function(err, response) {
         if ( err ) {
+            console.log("error by get playlists and id: "+id)
             deferred.resolve([])
         } else {
             var playlists = {"user_id":id,"playlists": []}
@@ -142,6 +146,7 @@ function getFavoritesFromUser(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/favorites", function(err, response) {
         if ( err ) {
+            console.log("error by get favorites and id: "+id)
             deferred.resolve([])
         } else {
             var tracks = []
