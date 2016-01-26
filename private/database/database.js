@@ -175,7 +175,7 @@ function getGoldUsers(){
 
   rethinkdb
       .db(config.database.name)
-      .table('testUsers')
+      .table('goldUsers')
       .run(dbConnection, function(err, cursor){
         if (err) throw err
         cursor.toArray(function(err, result) {

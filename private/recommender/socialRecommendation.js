@@ -36,7 +36,7 @@ function collectValuesFromModules(user, tracks, topSongs){
 
     promises.push(module1.getRecommendation(tracks.playlists,1))
     promises.push(module2.getRecommendation(tracks.favorites,1))
-    promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks,1))
+    promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks,20,1))
     promises.push(module4.getRecommendation(user.playlists, tracks.playlists,3))
 
     q.all(promises).then(function(response){
@@ -63,7 +63,7 @@ function collectValuesFromModules(user, tracks, topSongs){
         sortedTracks.sort(function(a, b) {return b[1] - a[1]})
 
         var trackIds = sortedTracks.map(function ( track ) { return track[0] })
-        trackIds = trackIds.slice(0,topSongs)
+        //trackIds = trackIds.slice(0,topSongs)
 
         deferred.resolve(trackIds)
     })

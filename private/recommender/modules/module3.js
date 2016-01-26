@@ -12,7 +12,7 @@ module.exports = {
     getRecommendation
 }
 
-function getRecommendation(favorites, playlists, tracks, factor){
+function getRecommendation(favorites, playlists, tracks, maxTracks, factor){
     var deferred = q.defer()
 
     var userSongs = {}
@@ -61,11 +61,11 @@ function getRecommendation(favorites, playlists, tracks, factor){
 
         similarUsers.push({"user_id":userId,"similarity":similarity})
     }
-
     similarUsers = similarUsers.sort(function(a,b){return b.similarity - a.similarity})
     similarUsers = similarUsers.slice(0,5)
 
     var similarities = {}
+
     for(var i=0; i<similarUsers.length; i++){
         similarities[similarUsers[i].user_id] = similarUsers[i].similarity
     }
@@ -75,10 +75,10 @@ function getRecommendation(favorites, playlists, tracks, factor){
     for(var i=0;i<tracks.length;i++){
 
         var userId = tracks[i].user_id
-        if(similarities.hasOwnProperty(userId) && similarities[userId]>0){
-            var value = similarities[userId]
+        if(similarities.hasOwnProperty(userId)){
+            var value = similarities[userId]+1
 
-            for(var j=0;j<tracks[i].tracks.length || j<10;j++){
+            for(var j=0;j<tracks[i].tracks.length && j<maxTracks;j++){
                 var trackId = tracks[i].tracks[j]
 
                 if(recommendedTracks.hasOwnProperty(trackId)){
