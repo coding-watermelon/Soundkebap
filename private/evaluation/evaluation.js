@@ -64,7 +64,7 @@ function evaluateUser(user){
         }
         availableTracks.playlists = [{"user_id":userId,"playlists":playlists}]
 
-        recommender.collectValuesFromModules(availableTracks,user.otherUsers,100).then(function(recommendedTracks){
+        recommender.collectValuesFromModules(availableTracks,user.otherUsers,removedTracks.length*5).then(function(recommendedTracks){
             let commonIds = 0
 
             for(let i=0;i<recommendedTracks.length;i++){
@@ -74,7 +74,6 @@ function evaluateUser(user){
                     }
                 }
             }
-            console.log(commonIds)
 
             precision += (commonIds/(recommendedTracks.length*maxFolds))
             recall += (commonIds/(removedTracks.length*maxFolds))
@@ -104,11 +103,12 @@ function evaluateUsers(){
         let overallRecall = 0.0
 
         function callEvaluateUser(user){
-            console.log("evaluate user "+i)
+            //console.log("evaluate user "+i)
             evaluateUser(user)
                 .then(function(result){
 
-                    console.log(result.precision, result.recall)
+                    //console.log(result.precision, result.recall)
+                    //console.log("=====================")
 
                     overallPrecision = overallPrecision + (result.precision/ users.length)
                     overallRecall = overallRecall + (result.recall/ users.length)
