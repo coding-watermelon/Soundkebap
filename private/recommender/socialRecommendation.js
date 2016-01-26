@@ -89,7 +89,7 @@ function getRecommendation(user){
     return deferred.promise
 }
 
-  //getRecommendation({ id: 131842115,
+  // getRecommendation({ id: 131842115,
   //      kind: 'user',
   //      permalink: 'sebastian-rehfeldt-1',
   //      username: 'Sebastian Rehfeldt',
@@ -115,7 +115,7 @@ function getRecommendation(user){
   //      followers_count: 6,
   //      followings_count: 17,
   //      subscriptions: [] }
-  //).then(function(response){
+  // ).then(function(response){
   //        console.log("\nFinal Recommendation\n======================\n")
   //        console.log(response)
   //    })

@@ -5,7 +5,10 @@ const q          = require('q')
 
 module.exports = {start}
 
-start(1,1000)
+start(1454)
+  .catch(function(err){
+    console.log(err)
+  })
 
 function start(startId, endId){
   const deferred = q.defer()
@@ -55,6 +58,7 @@ function getPlaylist(id){
   soundcloud.getPlaylistByid(id)
     .then(deferred.resolve)
     .catch(function(err){
+      console.log(err)
       if(err[0].error_message === '404 - Not Found')
         deferred.reject('next')
       else{
@@ -72,6 +76,7 @@ function extractGenres(playlist){
 
   if(playlist.tracks.length < 4){
     deferred.reject('next')
+    return deferred.promise
   }
 
   for(var i=0; i<playlist.tracks.length; i++){
@@ -99,6 +104,7 @@ function saveTracks(playlist){
       deferred.resolve({
         id: playlist.id,
         user_id: playlist.user_id,
+        genres: playlist.genres,
         tracks: tracks
       })
     })
