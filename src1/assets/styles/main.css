@@ -1,0 +1,61 @@
+.audio-control {
+  padding: 1rem;
+  border: none;
+  color: #fff;
+  background-color: rgba(0,0,0,0.45);
+}
+.audio-controls {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.track-display {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 4rem;
+  display: flex;
+}
+.track-artwork {
+  background-color: rgba(0,0,0,0.45);
+  padding: 1rem;
+  display: inline-block;
+}
+.track-info {
+  color: #fff;
+  font-size: 2rem;
+  margin-left: 0.2rem;
+}
+.track-info div {
+  background-color: rgba(0,0,0,0.45);
+  padding: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+.track-info .track-user {
+  display: inline-flex;
+}
+#soundcloud-authorizer {
+  max-width: 400px;
+  background-color: rgba(0,0,0,0.45);
+  margin: auto;
+  padding: 2rem;
+  text-align: center;
+}
+#soundcloud-authorizer span#authorizer-description {
+  display: block;
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 2rem;
+}
+#soundcloud-authorizer .soundcloud-connect {
+  background-color: #f80;
+  color: #fff;
+}
+#soundcloud-authorizer .soundcloud-connect span {
+  font-size: 20px;
+  margin-left: 10px;
+}
+body {
+  background-image: url("../img/background/waves.jpg");
+  background-size: cover;
+  padding: 4rem 8rem;
+}
