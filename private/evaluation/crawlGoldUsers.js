@@ -58,15 +58,16 @@ function getUser(maxId){
     return q.all([
         soundcloud.getUnknownUser(randomId, maxId)
     ]).then(function(response){
-        let minConnections = 3
-        let minPlaylists = 1
-        let maxConnections = 50
+        let minConnections = 50
+        let minPlaylists = 2
+        let minTracks = 10
 
         let user = response[0].user
         let maxId = response[0].maxId
         let connections = user.followers_count + user.followings_count
+        let tracks = user.public_favorites_count + user.track_count
 
-        if(connections >= minConnections && connections < maxConnections && user.playlist_count >= minPlaylists){
+        if(connections >= minConnections && user.playlist_count >= minPlaylists && tracks >= minTracks){
             console.log(connections)
             return user.id
         }
@@ -84,13 +85,13 @@ function crawlUserSample(count){
         console.log(ids)
         let i=0
 
-        function callAddUser(id,i,count){
+        function callAddUser(){
             console.log("call add User "+i)
-            addUser(id,i)
+            addUser(ids[i],i)
                 .then(function(){
                     if(i<count-1){
                         i++
-                        callAddUser(id,i,count)
+                        callAddUser(ids[i],i)
                     }
                     else{
                         deferred.resolve("crawling completed")
@@ -98,13 +99,13 @@ function crawlUserSample(count){
                 })
         }
 
-        callAddUser(ids[i], i,count)
+        callAddUser()
 
     })
 
     return deferred.promise
 }
 
-//crawlUserSample(20).then(function(response){
-//    console.log(response)
-//})
+crawlUserSample(20).then(function(response){
+    console.log(response)
+})

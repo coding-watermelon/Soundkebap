@@ -6,7 +6,6 @@ const db            = require(__dirname + '/../database/database.js'),
 
 function evaluateUser(user){
     const deferred = q.defer()
-
     const userId = user.user.favorites[0].user_id
     const favoritesLength = user.user.favorites[0].favorites.length
     const tracksLength = user.user.tracks[0].tracks.length
@@ -65,7 +64,7 @@ function evaluateUser(user){
         }
         availableTracks.playlists = [{"user_id":userId,"playlists":playlists}]
 
-        recommender.collectValuesFromModules(availableTracks,user.otherUsers,1000).then(function(recommendedTracks){
+        recommender.collectValuesFromModules(availableTracks,user.otherUsers,100).then(function(recommendedTracks){
             let commonIds = 0
 
             for(let i=0;i<recommendedTracks.length;i++){
