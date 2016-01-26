@@ -16,7 +16,7 @@ function getRecommendation(user){
 
   socialRecommender.getRecommendation(user)
     .then(function(tracks){
-      deferred.resolve(tracks.slice(0,100))
+      deferred.resolve(tracks.slice(0,40))
     })
 
   return deferred.promise

@@ -15,6 +15,7 @@ SC.init({
 
 module.exports = {
     getUser,
+    getUnknownUser,
     getFollowers,
     getFollowings,
     getConnections,
@@ -38,11 +39,24 @@ function getUser(id, accessToken){
   return deferred.promise
 }
 
+function getUnknownUser(id, maxId){
+  var deferred = q.defer()
+  SC.get("/users/"+id, function(err, user) {
+      if ( err ) {
+          deferred.resolve({"user":{},"maxId":maxId})
+      } else {
+          deferred.resolve({"user":user,"maxId":maxId})
+      }
+  })
+  return deferred.promise
+}
+
 function getFollowers(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/followers", function(err, response) {
         if ( err ) {
-            throw err;
+            console.log("error by get followers and id: "+id)
+            deferred.resolve([])
         } else {
             deferred.resolve(response.collection)
         }
@@ -54,7 +68,8 @@ function getFollowings(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/followings", function(err, response) {
         if ( err ) {
-            throw err;
+            console.log("error by get followings and id: "+id)
+            deferred.resolve([])
         } else {
             deferred.resolve(response.collection)
         }
@@ -93,7 +108,8 @@ function getTracksFromUser(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/tracks", function(err, response) {
         if ( err ) {
-            throw err;
+            console.log("error by get tracks and id: "+id)
+            deferred.reject(err)
         } else {
             var tracks = []
             for(var i=0; i<response.length;i++){
@@ -109,7 +125,8 @@ function getPlaylistsFromUser(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/playlists", function(err, response) {
         if ( err ) {
-            throw err;
+            console.log("error by get playlists and id: "+id)
+            deferred.reject(err)
         } else {
             var playlists = {"user_id":id,"playlists": []}
             for(var i=0; i< response.length;i++){
@@ -129,7 +146,8 @@ function getFavoritesFromUser(id){
     var deferred = q.defer()
     SC.get("/users/"+id+"/favorites", function(err, response) {
         if ( err ) {
-            throw err;
+            console.log("error by get favorites and id: "+id)
+            deferred.reject(err)
         } else {
             var tracks = []
             for(var i=0; i< response.length;i++){
@@ -156,11 +174,11 @@ function getTracks(users){
         var recommendedTracks = {"tracks": [], "playlists": [], "favorites": []}
 
         for(var i=0;i<response.length;i++){
-            if(response[i].value.hasOwnProperty("tracks"))
+            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("tracks"))
                 recommendedTracks.tracks.push(response[i].value)
-            if(response[i].value.hasOwnProperty("playlists"))
+            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("playlists"))
                 recommendedTracks.playlists.push(response[i].value)
-            if(response[i].value.hasOwnProperty("favorites"))
+            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("favorites"))
                 recommendedTracks.favorites.push(response[i].value)
         }
 

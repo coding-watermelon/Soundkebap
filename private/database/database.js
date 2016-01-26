@@ -19,6 +19,8 @@ module.exports = {
   addUser,
   addTrack,
   addPlaylist,
+  addGoldUser,
+  getGoldUsers
 }
 // User part
 function getUser(){
@@ -144,6 +146,43 @@ function addPlaylist (playlist) {
       else
         deferred.resolve()
     })
+
+  return deferred.promise
+}
+
+
+// ####################### gold data set for evaluation
+
+function addGoldUser(user){
+  const deferred = q.defer()
+
+  rethinkdb
+      .db(config.database.name)
+      .table('testUsers')
+      .insert(user)
+      .run(dbConnection, function(err, result){
+        if(err)
+          deferred.reject(err)
+        else
+          deferred.resolve("added goldUser")
+      })
+
+  return deferred.promise
+}
+
+function getGoldUsers(){
+  const deferred = q.defer()
+
+  rethinkdb
+      .db(config.database.name)
+      .table('testUsers')
+      .run(dbConnection, function(err, cursor){
+        if (err) throw err
+        cursor.toArray(function(err, result) {
+          if (err) throw err
+          deferred.resolve(result)
+        })
+      })
 
   return deferred.promise
 }

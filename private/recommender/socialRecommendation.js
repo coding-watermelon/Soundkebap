@@ -1,19 +1,20 @@
 'use strict'
 /*
-Short Module description
+ Short Module description
 
-*/
+ */
 
 const module1 = require(__dirname + '/modules/module1.js'),
-      module2 = require(__dirname + '/modules/module2.js'),
-      module3 = require(__dirname + '/modules/module3.js'),
-      module4 = require(__dirname + '/modules/module4.js'),
-      soundcloud = require(__dirname + '/../soundcloud/connector.js'),
-      SC = require('node-soundcloud'),
-      q = require('q')
+    module2 = require(__dirname + '/modules/module2.js'),
+    module3 = require(__dirname + '/modules/module3.js'),
+    module4 = require(__dirname + '/modules/module4.js'),
+    soundcloud = require(__dirname + '/../soundcloud/connector.js'),
+    SC = require('node-soundcloud'),
+    q = require('q')
 
 module.exports = {
-      getRecommendation
+    getRecommendation,
+    collectValuesFromModules
 }
 
 function getTracksFromOtherUsers(id){
@@ -29,14 +30,14 @@ function getTracksFromOtherUsers(id){
     return deferred.promise
 }
 
-function collectValuesFromModules(user, tracks){
+function collectValuesFromModules(user, tracks, topSongs){
     var deferred = q.defer()
     var promises = []
 
-    promises.push(module1.getRecommendation(tracks.playlists))
-    promises.push(module2.getRecommendation(tracks.favorites))
-    promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks))
-    promises.push(module4.getRecommendation(user.playlists, tracks.playlists))
+    promises.push(module1.getRecommendation(tracks.playlists,1))
+    promises.push(module2.getRecommendation(tracks.favorites,1))
+    promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks,1))
+    promises.push(module4.getRecommendation(user.playlists, tracks.playlists,3))
 
     q.all(promises).then(function(response){
         var tracks = {}
@@ -62,7 +63,7 @@ function collectValuesFromModules(user, tracks){
         sortedTracks.sort(function(a, b) {return b[1] - a[1]})
 
         var trackIds = sortedTracks.map(function ( track ) { return track[0] })
-        trackIds = trackIds.slice(0,20)
+        trackIds = trackIds.slice(0,topSongs)
 
         deferred.resolve(trackIds)
     })
@@ -80,7 +81,7 @@ function getRecommendation(user){
 
     q.all(promises).spread(function(user, tracks){
 
-        collectValuesFromModules(user, tracks).then(function(rankedTracks){
+        collectValuesFromModules(user, tracks,20).then(function(rankedTracks){
             deferred.resolve(rankedTracks)
         })
 

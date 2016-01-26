@@ -12,7 +12,7 @@ module.exports = {
     getRecommendation
 }
 
-function getRecommendation(user, otherUsers){
+function getRecommendation(user, otherUsers, factor){
     var deferred = q.defer()
 
     var userTracks = {}
@@ -83,7 +83,7 @@ function getRecommendation(user, otherUsers){
     for(var i=0;i<otherUserTracks.length;i++){
 
         var userId = otherUserTracks[i].user_id
-        if(similarities.hasOwnProperty(userId) && similarities[userId]>0){
+        if(similarities.hasOwnProperty(userId)){
 
             for(var track in otherUserTracks[i].tracks){
                 var value = similarities[userId] + otherUserTracks[i].tracks[track]
@@ -98,7 +98,7 @@ function getRecommendation(user, otherUsers){
         }
     }
 
-    helperModule.getNormalizedTracks(recommendedTracks, 3).then(function(normalizedTracks){
+    helperModule.getNormalizedTracks(recommendedTracks, factor).then(function(normalizedTracks){
         deferred.resolve(normalizedTracks)
     })
 
