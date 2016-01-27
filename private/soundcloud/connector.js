@@ -112,10 +112,23 @@ function getTracksFromUser(id){
             deferred.reject(err)
         } else {
             var tracks = []
+            var lookup = {}
+
             for(var i=0; i<response.length;i++){
                 tracks.push(response[i].id)
+                lookup[response[i].id] = {
+                    "id":           response[i].id,
+                    "title":        response[i].title,
+                    "artwork_url":  response[i].artwork_url,
+                    "username":     response[i].user.username
+                }
             }
-            deferred.resolve({"user_id":id,"tracks":tracks})
+
+            var res = {}
+            res.content = {"user_id":id,"tracks":tracks}
+            res.lookup = lookup
+
+            deferred.resolve(res)
         }
     })
     return deferred.promise
@@ -129,14 +142,23 @@ function getPlaylistsFromUser(id){
             deferred.reject(err)
         } else {
             var playlists = {"user_id":id,"playlists": []}
+            var lookup = {}
+
             for(var i=0; i< response.length;i++){
                 var playlist = []
                 for(var j=0;j<response[i].tracks.length;j++){
                     playlist.push(response[i].tracks[j].id)
+                    lookup[response[i].tracks[j].id] = {
+                        "id":           response[i].tracks[j].id,
+                        "title":        response[i].tracks[j].title,
+                        "artwork_url":  response[i].tracks[j].artwork_url,
+                        "username":     response[i].tracks[j].user.username
+                    }
                 }
                 playlists.playlists.push(playlist)
             }
-            deferred.resolve(playlists)
+
+            deferred.resolve({"content":playlists,"lookup":lookup})
         }
     })
     return deferred.promise
@@ -150,10 +172,23 @@ function getFavoritesFromUser(id){
             deferred.reject(err)
         } else {
             var tracks = []
+            var lookup = {}
+
             for(var i=0; i< response.length;i++){
                 tracks.push(response[i].id)
+                lookup[response[i].id] = {
+                    "id":           response[i].id,
+                    "title":        response[i].title,
+                    "artwork_url":  response[i].artwork_url,
+                    "username":     response[i].user.username
+                }
             }
-            deferred.resolve({"user_id":id,"favorites":tracks})
+
+            var res = {}
+            res.content = {"user_id":id,"favorites":tracks}
+            res.lookup = lookup
+
+            deferred.resolve(res)
         }
     })
     return deferred.promise
@@ -171,15 +206,22 @@ function getTracks(users){
     }
 
     q.allSettled(promises).then(function(response){
-        var recommendedTracks = {"tracks": [], "playlists": [], "favorites": []}
+        var recommendedTracks = {"tracks": [], "playlists": [], "favorites": [], "lookup": {}}
 
         for(var i=0;i<response.length;i++){
-            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("tracks"))
-                recommendedTracks.tracks.push(response[i].value)
-            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("playlists"))
-                recommendedTracks.playlists.push(response[i].value)
-            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("favorites"))
-                recommendedTracks.favorites.push(response[i].value)
+            //add content
+            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("content")){
+                if(response[i].value.content.hasOwnProperty("tracks"))
+                    recommendedTracks.tracks.push(response[i].value.content)
+                if(response[i].value.content.hasOwnProperty("playlists"))
+                    recommendedTracks.playlists.push(response[i].value.content)
+                if(response[i].value.content.hasOwnProperty("favorites"))
+                    recommendedTracks.favorites.push(response[i].value.content)
+            }
+
+            //merge lookup table
+            if(response[i].state === "fulfilled" && response[i].value.hasOwnProperty("lookup"))
+                recommendedTracks.lookup = Object.assign(recommendedTracks.lookup,response[i].value.lookup) //merge objects
         }
 
         deferred.resolve(recommendedTracks)
