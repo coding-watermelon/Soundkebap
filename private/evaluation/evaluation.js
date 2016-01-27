@@ -103,7 +103,7 @@ function evaluateUsers(){
         let overallRecall = 0.0
 
         function callEvaluateUser(user){
-            //console.log("evaluate user "+i)
+            console.log("evaluate user "+i)
             evaluateUser(user)
                 .then(function(result){
 
