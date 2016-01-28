@@ -50,9 +50,15 @@ export class AppComponent implements OnInit {
       if(this.getCookie('user-id') != "" ){
         this.loggedIn = true
         this._actionTracker.login()
-        this._dataProvider.userId = this.getCookie('user-id')
-        console.log("load data :D")
-        this._streamingService.loadData()
+          .subscribe(
+            data => {
+              this._dataProvider.userId = this.getCookie('user-id')
+              this._streamingService.loadData()
+            },
+            err => console.log(err),
+            () => console.log('Authentication Complete')
+          );
+
       }
   }
 

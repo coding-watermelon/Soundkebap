@@ -9,12 +9,8 @@ export class ActionTracker {
   constructor(private _http:Http){}
 
   login(){
-    this._http.post('/api/login', "")
-    .subscribe(
-      data => console.log(data),
-      err => console.log(err),
-      () => console.log('Authentication Complete')
-    );
+    return this._http.post('/api/login', "")
+
   }
 
   trackSkipped(id, seconds){
