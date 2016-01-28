@@ -17,7 +17,7 @@ import {HTTP_PROVIDERS} from 'angular2/http';
     directives: [TrackDisplay, AudioControls, SoundcloudAuthorizer, Playlist],
     template:`
       <soundcloud-authorizer *ngIf="!loggedIn"><soundcloud-authorizer>
-      <div class="row">
+      <div class="row" *ngIf="loggedIn">
         <div class="col-sm-6 wrapper">
           <audio-controls *ngIf="loggedIn"></audio-controls>
           <track-display *ngIf="loggedIn"></track-display>
