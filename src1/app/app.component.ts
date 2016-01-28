@@ -3,6 +3,7 @@ import {Component, OnInit} from 'angular2/core';
 import {Track} from './track'
 import {AudioControls} from './audio-controls.component';
 import {TrackDisplay} from './track-display.component';
+import {Playlist} from './playlist.component';
 import {SoundcloudAuthorizer} from './soundcloud-authorizer.component';
 import {StreamingService} from './streaming.service'
 import {ActionTracker} from './action-tracker.service'
@@ -13,10 +14,17 @@ import {HTTP_PROVIDERS} from 'angular2/http';
 @Component({
     selector: 'my-app',
     providers: [StreamingService, DataProvider, ActionTracker, HTTP_PROVIDERS],
-    directives: [TrackDisplay, AudioControls, SoundcloudAuthorizer],
+    directives: [TrackDisplay, AudioControls, SoundcloudAuthorizer, Playlist],
     template:`
-      <audio-controls *ngIf="loggedIn"></audio-controls>
-      <track-display *ngIf="loggedIn"></track-display>
+      <div class="row">
+        <div class="col-sm-6 wrapper">
+          <audio-controls *ngIf="loggedIn"></audio-controls>
+          <track-display *ngIf="loggedIn"></track-display>
+        </div>
+        <div class="col-sm-6 wrapper">
+          <playlist></playlist>
+        </div>
+      </div>
       <soundcloud-authorizer *ngIf="!loggedIn"><soundcloud-authorizer>
     `
 })

@@ -32,6 +32,8 @@ module.exports = function(app) {
   app.route('/api/track/played')
     .all(isValid)
     .post(function(req,res){
+        console.log("Played called with", req.body)
+        res.send({})
     })
 
   app.route('/api/login')

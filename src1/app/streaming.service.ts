@@ -10,6 +10,9 @@ export class StreamingService {
   private _audio = document.createElement("AUDIO")
   public tracks:Track[] = []
   public currentTrack:Track = {id: null, info: '' }
+  public pub = {
+    tracks: [],
+  }
   public songProgress = {
     percentage: 0,
     currentTime: '0:00'
@@ -20,7 +23,7 @@ export class StreamingService {
   constructor(private _dataProvider: DataProvider,
               private _actionTracker: ActionTracker) {
       this._audio.addEventListener('ended', event => {
-          this.setTrack(true)
+          this.next(true)
       })
       this._audio.addEventListener('play', event => {
           this._playingSince = this._audio.currentTime
@@ -35,26 +38,32 @@ export class StreamingService {
       this._audio.addEventListener('durationchange', (event) => {
         console.log("Duration changed to ", this._audio.duration)
       })
+      this._dataProvider.getTracks().subscribe(data => {
+        data = data.json()
+        this.tracks = this.tracks.concat(data)
+        this.pub.tracks = this.tracks
+        this.setTrack()
+      })
   }
 
   next(startPlaying:Boolean) : void {
     //Monitor if a track was skipped due to dislike
     this._playedSeconds += this._audio.currentTime - this._playingSince
     // if(this._playedSeconds < 20)
-      this._actionTracker.trackSkipped(this.currentTrack.id, this._playedSeconds)
+    this._actionTracker.trackSkipped(this.currentTrack.id, this._playedSeconds)
 
-
-    if ( this.tracks.length < 2 ){
+    if ( this.tracks.length < 4 ){
       this._dataProvider.getTracks().subscribe(data => {
         data = data.json()
         this.tracks = this.tracks.concat(data)
+        this.pub.tracks = this.tracks
         this.setTrack()
 
         if ( startPlaying )
           this._audio.play()
       })
     }else{
-      this.setTrack()
+      this.setTrack(startPlaying)
     }
   }
 
@@ -67,6 +76,7 @@ export class StreamingService {
     this.currentTrack.info = this.tracks[0].info
     this._audio.src = 'https://api.soundcloud.com/tracks/'+ this.currentTrack.id +'/stream?client_id=a1c4188f7622b71c3e7c6cf7567fc488'
     this.tracks.splice(0, 1)
+    this.pub.tracks = this.tracks
 
     this._actionTracker.trackPlayed(this.currentTrack.id)
 

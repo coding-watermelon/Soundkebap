@@ -68,8 +68,27 @@
   font-size: 20px;
   margin-left: 10px;
 }
+#playlist {
+  background-color: rgba(0,0,0,0.45);
+  padding: 15px;
+  overflow: scroll;
+}
+#playlist .track {
+  padding: 10px;
+  color: #fff;
+}
+#playlist .track span {
+  display: block;
+}
+#playlist .track .track-username {
+  font-weight: 600;
+}
 body {
   background-image: url("../img/background/waves.jpg");
   background-size: cover;
   padding: 4rem 8rem;
+}
+.wrapper {
+  height: 100%;
+  overflow: scroll;
 }
