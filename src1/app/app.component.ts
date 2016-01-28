@@ -16,7 +16,7 @@ import {HTTP_PROVIDERS} from 'angular2/http';
     providers: [StreamingService, DataProvider, ActionTracker, HTTP_PROVIDERS],
     directives: [TrackDisplay, AudioControls, SoundcloudAuthorizer, Playlist],
     template:`
-      <soundcloud-authorizer *ngIf="!loggedIn"><soundcloud-authorizer>
+      <soundcloud-authorizer *ngIf="!loggedIn"></soundcloud-authorizer>
       <div class="row" *ngIf="loggedIn">
         <div class="col-sm-6 wrapper">
           <audio-controls *ngIf="loggedIn"></audio-controls>
@@ -41,7 +41,6 @@ export class AppComponent implements OnInit {
   ngOnInit(){
     // this._streamingService.setTrack()
     // this._streamingService.play()
-      console.log(document.cookie)
       let queryString = this.queryString()
       if(queryString.hasOwnProperty('userId')){
         document.cookie = "user-id="+queryString.userId
@@ -52,6 +51,7 @@ export class AppComponent implements OnInit {
         this.loggedIn = true
         this._actionTracker.login()
         this._dataProvider.userId = this.getCookie('user-id')
+        this._streamingService.loadData()
       }
   }
 

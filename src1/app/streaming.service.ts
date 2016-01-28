@@ -39,13 +39,19 @@ export class StreamingService {
       this._audio.addEventListener('durationchange', (event) => {
         console.log("Duration changed to ", this._audio.duration)
       })
-      this._dataProvider.getTracks().subscribe(data => {
+  }
+
+  loadData(){
+    this._dataProvider.getTracks().subscribe(
+      data => {
         data = data.json()
         this.tracks = this.tracks.concat(data)
         this.pub.tracks = this.tracks
         this.setTrack()
         this.pub.loading = false
-      })
+      },
+      err => {console.log(err)}
+    )
   }
 
   next(startPlaying:Boolean) : void {
