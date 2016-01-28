@@ -66,10 +66,10 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
             }
         }
 
-        //TODO: remove or decrease value of own tracks
-
         var sortedTracks = []
         for(let track in tracks){
+            if(Object.keys(lookup).length > 0)
+                lookup[track].value = tracks[track]
             sortedTracks.push([track, tracks[track]])
         }
         sortedTracks.sort(function(a, b) {return b[1] - a[1]})
@@ -108,7 +108,7 @@ function getRecommendation(user){
 
     q.all(promises).spread(function(user, tracks){
 
-        collectValuesFromModules(user, tracks,20,userGroup).then(function(rankedTracks){
+        collectValuesFromModules(user, tracks,1000,userGroup).then(function(rankedTracks){
             deferred.resolve(rankedTracks)
         })
 

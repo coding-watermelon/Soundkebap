@@ -21,7 +21,9 @@ module.exports = {
   addTrack,
   addPlaylist,
   addGoldUser,
-  getGoldUsers
+  getGoldUsers,
+  getHistory,
+  addSongToHistory
 }
 // User part
 function getUser(userId){
@@ -236,3 +238,109 @@ function getGoldUsers(){
 
   return deferred.promise
 }
+
+function getHistory(userId){
+  const deferred = q.defer()
+
+  rethinkdb
+      .db('soundkebap')
+      .table('history')
+      .filter(rethinkdb.row('userid').eq(userId))
+      .run(dbConnection, function(err, cursor){
+        if(err)
+          deferred.reject(err)
+        else {
+          cursor.toArray(function(err, result){
+            if(err)
+              deferred.reject()
+            else{
+              if(result.length > 0)
+                deferred.resolve(result[0].history)
+              else
+                deferred.resolve({})
+            }
+
+
+          })
+        }
+
+      })
+
+  return deferred.promise
+}
+
+function addSongToHistory(userId, song){
+  const deferred = q.defer()
+  const currentDate = Date.now()
+  const trackId = song.trackId
+
+  rethinkdb
+      .db('soundkebap')
+      .table('history')
+      .filter(rethinkdb.row('userid').eq(userId))
+      .run(dbConnection, function(err, cursor) {
+        if (err)
+          deferred.reject(err)
+        else {
+          cursor.toArray(function (err, res) {
+            if (err)
+              deferred.reject(err)
+            else {
+              if (res.length > 0) {
+                if (res[0].history.hasOwnProperty(trackId)) {
+                  res[0].history[trackId]["listening-count"] += song.listeningCount
+                  res[0].history[trackId]["skip-count"] += song.skipCount
+                  res[0].history[trackId]["last-listened"] = currentDate
+                }
+                else {
+                  res[0].history[trackId] = {}
+                  res[0].history[trackId]["listening-count"] = song.listeningCount
+                  res[0].history[trackId]["skip-count"] = song.skipCount
+                  res[0].history[trackId]["last-listened"] = currentDate
+                }
+
+                rethinkdb
+                    .db('soundkebap')
+                    .table('history')
+                    .filter(rethinkdb.row('userid').eq(userId))
+                    .update(res[0])
+                    .run(dbConnection, function (err, result) {
+                      if (err)
+                        deferred.reject(err)
+                      else
+                        deferred.resolve("updated history")
+                    })
+              }
+              else {
+                //create history for user
+                let user = {"userid":userId,"history":{
+                    [trackId]:    {"listening-count":song.listeningCount,
+                    "skip-count":song.skipCount,
+                    "last-listened":currentDate}}}
+
+                rethinkdb
+                    .db('soundkebap')
+                    .table('history')
+                    .insert(user)
+                    .run(dbConnection, function (err, res) {
+                      if (err)
+                        deferred.reject(err)
+                      else
+                        deferred.resolve("inserted history for user")
+                    })
+              }
+            }
+          })
+        }
+      })
+
+
+
+  return deferred.promise
+}
+//
+//setTimeout(function(){
+//  addSongToHistory(131842115,{"trackId":228366807,"listeningCount":0,"skipCount":1}).then(function(response){
+//    console.log(response)
+//  })
+//},1000)
