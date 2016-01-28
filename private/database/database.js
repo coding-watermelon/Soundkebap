@@ -278,7 +278,7 @@ function addSkipping(userId, trackId, seconds){
     .table('skips')
     .insert({
       userId: userId,
-      trackId: trackid,
+      trackId: trackId,
       seconds: seconds
     })
     .run(dbConnection, function (err, res) {

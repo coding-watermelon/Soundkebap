@@ -8,8 +8,10 @@ import {ActionTracker} from './action-tracker.service'
     <div class="audio-controls">
       <button class="audio-control" (click)="togglePlay()">
         <i  class="fa fa-play fa-2x"
-            [class.fa-play]="!playing"
-            [class.fa-pause]="playing">
+            [class.fa-play]="!playing && !pubStream.loading"
+            [class.fa-pause]="playing && !pubStream.loading"
+            [class.fa-spinner]="pubStream.loading"
+            [class.fa-pulse]="pubStream.loading">
         </i>
       </button>
       <button class="audio-control" (click)="next()"><i class="fa fa-forward fa-2x"></i></button>
@@ -19,9 +21,12 @@ import {ActionTracker} from './action-tracker.service'
 
 export class AudioControls {
   public playing:Boolean = false;
+  public pubStream;
 
   constructor(private _streamingService: StreamingService,
-              private _actionTracker: ActionTracker) { }
+              private _actionTracker: ActionTracker) {
+      this.pubStream = this._streamingService.pub
+  }
 
   togglePlay(){
     this.playing = !this.playing

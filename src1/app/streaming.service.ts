@@ -12,6 +12,7 @@ export class StreamingService {
   public currentTrack:Track = {id: null, info: '' }
   public pub = {
     tracks: [],
+    loading: true
   }
   public songProgress = {
     percentage: 0,
@@ -43,6 +44,7 @@ export class StreamingService {
         this.tracks = this.tracks.concat(data)
         this.pub.tracks = this.tracks
         this.setTrack()
+        this.pub.loading = false
       })
   }
 
