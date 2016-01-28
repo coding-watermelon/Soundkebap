@@ -7,16 +7,15 @@ import {StreamingService} from './streaming.service'
   selector: 'track-display',
   template: `
     <div class="track-display" *ngIf="currentTrack.id">
-      {{currentTrack.id}}
       <div class="track-artwork">
-        <img src="https://i1.sndcdn.com/artworks-000002257825-3czv6y-large.jpg"/>
+        <img [src]="currentTrack.info['artwork-url']"/>
       </div>
       <div class="track-info">
         <div class="track-name">
-          {{ currentTrack.info }}
+          {{ currentTrack.info.title }}
         </div>
         <div class="track-user">
-          Alle Farben
+          {{ currentTrack.info.username }}
         </div>
 
       </div>

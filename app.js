@@ -6,11 +6,13 @@ var stylus        = require('stylus'),
     bodyParser    = require('body-parser'),
     path          = require('path'),
     q             = require('q'),
-    port          = 7070
+    port          = 7070,
+    cookieParser = require('cookie-parser')
 
 const dbInit      = require(__dirname + '/private/scripts/rethinkdb_init.js')
 
 // --- app configuration
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({  extended: true }))
 app.use(bodyParser.json())
 app.use(stylus.middleware(path.join(__dirname, 'styles')))

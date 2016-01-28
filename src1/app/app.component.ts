@@ -5,11 +5,12 @@ import {AudioControls} from './audio-controls.component';
 import {TrackDisplay} from './track-display.component';
 import {SoundcloudAuthorizer} from './soundcloud-authorizer.component';
 import {StreamingService} from './streaming.service'
+import {ActionTracker} from './action-tracker.service'
 import {DataProvider} from './data-provider.service';
 
 @Component({
     selector: 'my-app',
-    providers: [StreamingService, DataProvider],
+    providers: [StreamingService, DataProvider, ActionTracker],
     directives: [TrackDisplay, AudioControls, SoundcloudAuthorizer],
     template:`
       <audio-controls *ngIf="loggedIn"></audio-controls>
@@ -24,18 +25,22 @@ export class AppComponent implements OnInit {
   public loggedIn : Boolean = false;
 
   constructor(private _streamingService: StreamingService,
-              private _dataProvider: DataProvider) { }
+              private _dataProvider: DataProvider,
+              private _actionTracker: ActionTracker) { }
 
   ngOnInit(){
     // this._streamingService.setTrack()
     // this._streamingService.play()
       console.log(document.cookie)
       let queryString = this.queryString()
-      if(queryString.hasOwnProperty('userId'))
+      if(queryString.hasOwnProperty('userId')){
         document.cookie = "user-id="+queryString.userId
+        document.cookie = "access-token="+queryString.access_token
+      }
 
       if(this.getCookie('user-id') != "" ){
         this.loggedIn = true
+        this._actionTracker.login()
         this._dataProvider.userId = this.getCookie('user-id')
       }
   }
