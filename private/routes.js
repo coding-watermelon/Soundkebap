@@ -33,7 +33,12 @@ module.exports = function(app) {
     .all(isValid)
     .post(function(req,res){
         db.addSkipping(req.sessionUser.id, req.body.id, req.body.seconds)
-          .then(function(){res.status(200).send()})
+          .then(function(){
+              db.addSongToHistory(req.sessionUser.id,{"trackId":req.body.id,"listeningCount":0,"skipCount":1})
+                .then(function(){
+                  res.send({})
+                })
+            })
           .catch(function(){res.status(505).send()})
     })
 
