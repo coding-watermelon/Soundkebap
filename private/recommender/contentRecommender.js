@@ -13,7 +13,6 @@ module.exports = {
 
 function getRecommendation(user){
   const deferred = q.defer()
-
   socialRecommender.getRecommendation(user)
     .then(function(tracks){
       deferred.resolve(tracks.slice(0,40))

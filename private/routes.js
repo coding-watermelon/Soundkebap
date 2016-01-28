@@ -3,6 +3,8 @@ const db            = require(__dirname + "/database/database.js"),
       recommender   = require(__dirname + "/recommender/recommender.js"),
       soundcloud    = require(__dirname + "/soundcloud/connector.js")
 
+const login         = require(__dirname + "/routes/login.js")
+
 module.exports = function(app) {
 
   /**
@@ -15,6 +17,9 @@ module.exports = function(app) {
     .post(function(req, res){
 
     })
+
+  app.route('/api/login')
+    .post(login)
 
   app.route('/api/newTracks')
     .get(function(req, res) {

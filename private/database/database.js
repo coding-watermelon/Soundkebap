@@ -23,7 +23,7 @@ module.exports = {
   getGoldUsers
 }
 // User part
-function getUser(){
+function getUser(userId){
   const deferred = q.defer()
 
   if(!dbConnection){
@@ -31,34 +31,22 @@ function getUser(){
     return deferred.promise
   }
 
-  deferred.resolve({
-    "id": 183926100,
-    "kind": "user",
-    "permalink": "sittenstrolch-211195947",
-    "username": "Sittenstrolch",
-    "last_modified": "2016/01/09 14:05:29 +0000",
-    "uri": "https://api.soundcloud.com/users/183926100",
-    "permalink_url": "http://soundcloud.com/sittenstrolch-211195947",
-    "avatar_url": "https://a1.sndcdn.com/images/default_avatar_large.png",
-    "country": null,
-    "first_name": null,
-    "last_name": null,
-    "full_name": "",
-    "description": null,
-    "city": null,
-    "discogs_name": null,
-    "myspace_name": null,
-    "website": null,
-    "website_title": null,
-    "online": false,
-    "track_count": 0,
-    "playlist_count": 0,
-    "plan": "Free",
-    "public_favorites_count": 2,
-    "followers_count": 2,
-    "followings_count": 2,
-    "subscriptions": []
-  })
+  rethinkdb
+    .db('soundkebap')
+    .table('user')
+    .filter(rethinkdb.row('id').eq(userId))
+    .run(dbConnection, function(err, cursor){
+      if(err)
+        deferred.reject(err)
+      else{
+        cursor.toArray(function(err, result){
+          if(err || result.length != 1)
+            deferred.reject()
+          else
+            deferred.resolve(result[0])
+        })
+      }
+    })
 
   return deferred.promise
 }
@@ -117,7 +105,7 @@ function addTrack (track) {
     favoritings_count: track.favoritings_count ? track.favoritings_count : null,
     comment_count: track.comment_count ? track.comment_count : null,
   }
-  
+
   rethinkdb
     .db(config.database.name)
     .table('track')
