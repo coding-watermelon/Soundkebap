@@ -21,7 +21,7 @@ function getTracksFromOtherUsers(id){
     const deferred = q.defer()
 
     soundcloud.getConnections(id).then(function(connections){
-        soundcloud.getTracks(connections).then(function(tracks){
+        soundcloud.getTracks(connections, "").then(function(tracks){
             deferred.resolve(tracks)
         })
 
@@ -36,7 +36,7 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
 
     var factors = []
     switch (userGroup){
-        case 'A': factors =[1,1,1,1];break;
+        case 'A': factors =[5,5,1,1];break;
         case 'B': factors =[1,1,5,1];break;
         case 'C': factors =[1,1,1,5];break;
         default : factors =[1,1,1,1];break;
@@ -100,8 +100,7 @@ function getRecommendation(user){
     var deferred = q.defer()
     var promises = []
 
-
-    promises.push(soundcloud.getTracks([user.id]))
+    promises.push(soundcloud.getTracks([user.id],user.accessToken))
     promises.push(getTracksFromOtherUsers(user.id))
 
     var userGroup = user.testGroup
@@ -119,32 +118,36 @@ function getRecommendation(user){
 
     //Jan: 82147580
     //Basti: 131842115
-   //getRecommendation({ id: 131842115,
-   //     kind: 'user',
-   //     permalink: 'sebastian-rehfeldt-1',
-   //     username: 'Sebastian Rehfeldt',
-   //     last_modified: '2015/10/14 13:21:49 +0000',
-   //     uri: 'https://api.soundcloud.com/users/131842115',
-   //     permalink_url: 'http://soundcloud.com/sebastian-rehfeldt-1',
-   //     avatar_url: 'https://i1.sndcdn.com/avatars-000123963373-p1mmtc-large.jpg',
-   //     country: null,
-   //     first_name: 'Sebastian',
-   //     last_name: 'Rehfeldt',
-   //     full_name: 'Sebastian Rehfeldt',
-   //     description: null,
-   //     city: null,
-   //     discogs_name: null,
-   //     myspace_name: null,
-   //     website: null,
-   //     website_title: null,
-   //     online: false,
-   //     track_count: 0,
-   //     playlist_count: 1,
-   //     plan: 'Free',
-   //     public_favorites_count: 3,
-   //     followers_count: 6,
-   //     followings_count: 17,
-   //     subscriptions: [] }
+   //getRecommendation({
+   //    "accessToken":  "1-162111-131842115-01c04c60d99c9" ,
+   //    "avatar_url": "https://i1.sndcdn.com/avatars-000171042308-wepww8-large.jpg",
+   //         "city":  "Perleberg" ,
+   //         "country": null ,
+   //         "description":  "" ,
+   //         "discogs_name": null ,
+   //         "first_name":  "CHRIS." ,
+   //         "followers_count": 203 ,
+   //         "followings_count": 11 ,
+   //         "full_name":  "CHRIS. TIAN" ,
+   //         "id": 131842115 ,
+   //         "kind":  "user" ,
+   //         "last_modified":  "2015/09/01 18:52:48 +0000" ,
+   //         "last_name":  "TIAN" ,
+   //         "myspace_name": null ,
+   //         "online": false ,
+   //         "permalink":  "christian2386" ,
+   //         "permalink_url": "http://soundcloud.com/christian2386",
+   //         "plan":  "Free" ,
+   //         "playlist_count": 0 ,
+   //         "public_favorites_count": 14 ,
+   //         "subscriptions": [ ],
+   //         "testGroup":  "C" ,
+   //         "track_count": 13 ,
+   //         "uri": "https://api.soundcloud.com/users/5426836",
+   //         "username":  "CHRIS.TIAN" ,
+   //         "website": null ,
+   //         "website_title": null
+   //     }
    //).then(function(response){
    //       console.log("\nFinal Recommendation\n======================\n")
    //       console.log(response)
