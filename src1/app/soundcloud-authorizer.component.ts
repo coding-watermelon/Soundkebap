@@ -23,7 +23,7 @@ export class SoundcloudAuthorizer {
 
   connectWithSoundcloud(){
     this.clientId = "a1c4188f7622b71c3e7c6cf7567fc488"
-    this.callbackUrl = "http://soundkebap.markus-petrykowski.de"
+    this.callbackUrl = "http://soundkebap.markus-petrykowski.de/"
     // window.location.href = `
     // https://soundcloud.com/connect?client_id=` + this.clientId +
     // "&display=popup&redirect_uri=" + this.callbackUrl +
@@ -31,7 +31,7 @@ export class SoundcloudAuthorizer {
 
     SC.initialize({
       client_id: 'a1c4188f7622b71c3e7c6cf7567fc488',
-      redirect_uri: 'http://soundkebap.markut-petrykowski.de' //ToDo: callbackFile needs to be registered on yourApps on soundcloud
+      redirect_uri: 'http://soundkebap.markus-petrykowski.de/' //ToDo: callbackFile needs to be registered on yourApps on soundcloud
     });
     SC.connect().then(function(){
         console.log("login")
