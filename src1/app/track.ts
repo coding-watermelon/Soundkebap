@@ -2,7 +2,7 @@ export interface Track {
   id: number;
   info: {
     "title": string;
-    "artwork-url": string;
+    "artwork_url": string;
     "username": string;
   };
 }

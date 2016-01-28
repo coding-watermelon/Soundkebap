@@ -19,7 +19,7 @@ module.exports = function(app) {
   //   })
 
   function isValid(req, res, next){
-    db.getUser(req.query.userId)
+    db.getUser(req.cookies["user-id"])
       .then(function(user){
         req.sessionUser = user
         next()
@@ -28,6 +28,11 @@ module.exports = function(app) {
         res.sendStatus(401)
       })
   }
+
+  app.route('/api/track/played')
+    .all(isValid)
+    .post(function(req,res){
+    })
 
   app.route('/api/login')
     .post(login)
@@ -46,10 +51,7 @@ module.exports = function(app) {
 
     })
 
-  app.route('/api/user/sessionStart')
-    .post(function(req,res){
 
-    })
 
 
   /*
@@ -69,7 +71,6 @@ module.exports = function(app) {
         })
         .catch(function(err){res.status(500).send(err)})
     })
-
 
 
 

@@ -8,9 +8,11 @@ import {StreamingService} from './streaming.service'
 import {ActionTracker} from './action-tracker.service'
 import {DataProvider} from './data-provider.service';
 
+import {HTTP_PROVIDERS} from 'angular2/http';
+
 @Component({
     selector: 'my-app',
-    providers: [StreamingService, DataProvider, ActionTracker],
+    providers: [StreamingService, DataProvider, ActionTracker, HTTP_PROVIDERS],
     directives: [TrackDisplay, AudioControls, SoundcloudAuthorizer],
     template:`
       <audio-controls *ngIf="loggedIn"></audio-controls>

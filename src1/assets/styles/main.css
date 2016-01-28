@@ -33,6 +33,20 @@
 .track-info .track-user {
   display: inline-flex;
 }
+.track-info #progressbar-wrapper {
+  text-align: center;
+  display: flex;
+}
+.track-info #progressbar-wrapper #progressbar {
+  width: 100%;
+  background-color: transparent;
+  cursor: pointer;
+}
+.track-info #progressbar-wrapper #time-progress {
+  line-height: 10px;
+  font-size: 12px;
+  background-color: transparent !important;
+}
 #soundcloud-authorizer {
   max-width: 400px;
   background-color: rgba(0,0,0,0.45);

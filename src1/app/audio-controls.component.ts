@@ -1,6 +1,6 @@
 import {Component} from 'angular2/core';
 import {StreamingService} from './streaming.service'
-
+import {ActionTracker} from './action-tracker.service'
 
 @Component({
   selector: 'audio-controls',
@@ -20,7 +20,8 @@ import {StreamingService} from './streaming.service'
 export class AudioControls {
   public playing:Boolean = false;
 
-  constructor(private _streamingService: StreamingService) { }
+  constructor(private _streamingService: StreamingService,
+              private _actionTracker: ActionTracker) { }
 
   togglePlay(){
     this.playing = !this.playing
@@ -33,7 +34,7 @@ export class AudioControls {
   }
 
   next(){
-    this._streamingService.next()
+    this._streamingService.next(this.playing)
   }
 
 }

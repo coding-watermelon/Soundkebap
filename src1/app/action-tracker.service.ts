@@ -14,4 +14,23 @@ export class ActionTracker {
       () => console.log('Authentication Complete')
     );
   }
+
+  trackSkipped(id, seconds){
+    this._http.post('/api/track/skipped', 'id='+id+"&seconds="+seconds)
+      .subscribe(
+        data => console.log(data),
+        err => console.log(err),
+        () => console.log('Authentication Complete')
+      );
+  }
+
+  trackPlayed(id){
+      console.log("trackPlayed")
+      this._http.post('/api/track/played', 'id='+id)
+        .subscribe(
+          data => console.log(data),
+          err => console.log(err),
+          () => console.log('Authentication Complete')
+        );
+  }
 }

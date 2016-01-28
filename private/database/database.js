@@ -26,7 +26,7 @@ module.exports = {
 // User part
 function getUser(userId){
   const deferred = q.defer()
-
+  userId = parseInt(userId)
   if(!dbConnection){
     deferred.reject('No connection to database!')
     return deferred.promise
