@@ -51,6 +51,7 @@ export class AppComponent implements OnInit {
         this.loggedIn = true
         this._actionTracker.login()
         this._dataProvider.userId = this.getCookie('user-id')
+        console.log("load data :D")
         this._streamingService.loadData()
       }
   }
