@@ -23,7 +23,8 @@ module.exports = {
   addGoldUser,
   getGoldUsers,
   getHistory,
-  addSongToHistory
+  addSongToHistory,
+  addSkipping
 }
 // User part
 function getUser(userId){
@@ -243,7 +244,7 @@ function getHistory(userId){
   const deferred = q.defer()
 
   rethinkdb
-      .db('soundkebap')
+      .db(config.database.name)
       .table('history')
       .filter(rethinkdb.row('userid').eq(userId))
       .run(dbConnection, function(err, cursor){
@@ -269,13 +270,34 @@ function getHistory(userId){
   return deferred.promise
 }
 
+function addSkipping(userId, trackId, seconds){
+  const deferred = q.defer()
+
+  rethinkdb
+    .db(config.database.name)
+    .table('skips')
+    .insert({
+      userId: userId,
+      trackId: trackid,
+      seconds: seconds
+    })
+    .run(dbConnection, function (err, res) {
+      if (err)
+        deferred.reject(err)
+      else
+        deferred.resolve()
+    })
+
+  return deferred.promise
+}
+
 function addSongToHistory(userId, song){
   const deferred = q.defer()
   const currentDate = Date.now()
   const trackId = song.trackId
 
   rethinkdb
-      .db('soundkebap')
+      .db(config.database.name)
       .table('history')
       .filter(rethinkdb.row('userid').eq(userId))
       .run(dbConnection, function(err, cursor) {

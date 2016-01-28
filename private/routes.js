@@ -29,6 +29,14 @@ module.exports = function(app) {
       })
   }
 
+  app.route('/api/track/skipped')
+    .all(isValid)
+    .post(function(req,res){
+        db.addSkipping(req.sessionUser.id, req.body.id, req.body.seconds)
+          .then(function(){res.status(200).send()})
+          .catch(function(){res.status(505).send()})
+    })
+
   app.route('/api/track/played')
     .all(isValid)
     .post(function(req,res){
