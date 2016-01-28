@@ -10,22 +10,32 @@ module.exports = function(app) {
   /**
     *  GET: :return_to - either 'register' or 'settings'
     */
-  app.route('/api/endpoint')
-    .get(function(req, res) {
+  // app.route('/api/endpoint')
+  //   .get(function(req, res) {
+  //
+  //   })
+  //   .post(function(req, res){
+  //
+  //   })
 
-    })
-    .post(function(req, res){
-
-    })
+  function isValid(req, res, next){
+    db.getUser(req.query.userId)
+      .then(function(user){
+        req.sessionUser = user
+        next()
+      })
+      .catch(function(err){
+        res.sendStatus(401)
+      })
+  }
 
   app.route('/api/login')
     .post(login)
 
   app.route('/api/newTracks')
+    .all(isValid)
     .get(function(req, res) {
-      console.log(req.query.userId)
-      db.getUser(req.query.userId)
-        .then(recommender.getRecommendation)
+      recommender.getRecommendation(req.sessionUser)
         .then(function(tracklist){
           res.status(200).send(tracklist)
         })
