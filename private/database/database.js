@@ -21,7 +21,8 @@ module.exports = {
   addTrack,
   addPlaylist,
   addGoldUser,
-  getGoldUsers
+  getGoldUsers,
+  getHistory
 }
 // User part
 function getUser(userId){
@@ -232,6 +233,30 @@ function getGoldUsers(){
           if (err) throw err
           deferred.resolve(result)
         })
+      })
+
+  return deferred.promise
+}
+
+function getHistory(userId){
+  const deferred = q.defer()
+
+  rethinkdb
+      .db('soundkebap')
+      .table('history')
+      .filter(rethinkdb.row('userid').eq(userId))
+      .run(dbConnection, function(err, cursor){
+        if(err)
+          deferred.reject(err)
+        else {
+          cursor.toArray(function(err, result){
+            if(err)
+              deferred.reject()
+            else
+              deferred.resolve(result[0].history)
+          })
+        }
+
       })
 
   return deferred.promise
