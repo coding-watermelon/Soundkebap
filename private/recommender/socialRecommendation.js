@@ -30,18 +30,26 @@ function getTracksFromOtherUsers(id){
     return deferred.promise
 }
 
-function collectValuesFromModules(user, tracks, topSongs){
+function collectValuesFromModules(user, tracks, topSongs, userGroup){
     var deferred = q.defer()
     var promises = []
+
+    var factors = []
+    switch (userGroup){
+        case 'A': factors =[1,1,1,1];break;
+        case 'B': factors =[1,1,5,1];break;
+        case 'C': factors =[1,1,1,5];break;
+        default : factors =[1,1,1,1];break;
+    }
 
     var lookup = {}
     if(user.hasOwnProperty("lookup") && tracks.hasOwnProperty("lookup"))
         lookup = Object.assign(user.lookup,tracks.lookup)
 
-    promises.push(module1.getRecommendation(tracks.playlists,1))
-    promises.push(module2.getRecommendation(tracks.favorites,1))
-    promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks,20,1))
-    promises.push(module4.getRecommendation(user.playlists, tracks.playlists,1))
+    promises.push(module1.getRecommendation(tracks.playlists,factors[0]))
+    promises.push(module2.getRecommendation(tracks.favorites,factors[1]))
+    promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks,20,factors[2]))
+    promises.push(module4.getRecommendation(user.playlists, tracks.playlists,factors[3]))
 
     q.all(promises).then(function(response){
         var tracks = {}
@@ -96,9 +104,11 @@ function getRecommendation(user){
     promises.push(soundcloud.getTracks([user.id]))
     promises.push(getTracksFromOtherUsers(user.id))
 
+    var userGroup = user.testGroup
+
     q.all(promises).spread(function(user, tracks){
 
-        collectValuesFromModules(user, tracks,20).then(function(rankedTracks){
+        collectValuesFromModules(user, tracks,20,userGroup).then(function(rankedTracks){
             deferred.resolve(rankedTracks)
         })
 

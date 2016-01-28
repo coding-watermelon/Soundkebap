@@ -64,11 +64,13 @@ function evaluateUser(user){
         }
         availableTracks.playlists = [{"user_id":userId,"playlists":playlists}]
 
-        recommender.collectValuesFromModules(availableTracks,user.otherUsers,removedTracks.length*5).then(function(recommendedTracks){
+        let topSongs = Math.max(removedTracks.length,20)
+
+        recommender.collectValuesFromModules(availableTracks,user.otherUsers,topSongs,"A").then(function(recommendedTracks){
             let commonIds = 0
 
             for(let i=0;i<recommendedTracks.length;i++){
-                for(let j=0;j<removedTracks.length;j++){
+                for(let j=0;j<topSongs;j++){
                     if(recommendedTracks[i] == removedTracks[j]){
                         commonIds ++
                     }
@@ -118,7 +120,9 @@ function evaluateUsers(){
                         callEvaluateUser(users[i])
                     }
                     else{
-                        deferred.resolve({"precision":overallPrecision,"recall":overallRecall})
+                        overallPrecision *= 100
+                        overallRecall *= 100
+                        deferred.resolve({"precision":overallPrecision.toFixed(2),"recall":overallRecall.toFixed(2)})
                     }
                 })
         }
