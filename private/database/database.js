@@ -17,6 +17,7 @@ rethinkdb
 module.exports = {
   getUser,
   addUser,
+  addUserWithTestGroup,
   addTrack,
   addPlaylist,
   addGoldUser,
@@ -46,6 +47,67 @@ function getUser(userId){
             deferred.resolve(result[0])
         })
       }
+    })
+
+  return deferred.promise
+}
+
+function getTestGroups(){
+  const deferred = q.defer()
+
+  rethinkdb
+    .db('soundkebap')
+    .table('user')
+    .group('testGroup')
+    .count()
+    .run(dbConnection, function(err, cursor){
+      if(err)
+        deferred.reject(err)
+      else {
+        cursor.toArray(function(err, result){
+          if(err)
+            deferred.reject()
+          else
+            deferred.resolve(result)
+        })
+      }
+
+    })
+
+  return deferred.promise
+}
+
+function addUserWithTestGroup(user){
+  const deferred = q.defer()
+
+  getTestGroups()
+    .then(function(testGroups){
+      let countA = 0
+      let countB = 0
+      let countC = 0
+
+      for(var i=0; i<testGroups.length; i++){
+        if(testGroups[i].group == "A"){
+          countA++
+        }else if(testGroups[i].group == "B"){
+          countB++
+        }else if(testGroups[i].group == "C"){
+          countC++
+        }
+      }
+
+      if(countA <= countB && countA <= countC){
+        user.testGroup = "A"
+      }else if(countB <= countA && countB <= countC){
+        user.testGroup = "B"
+      }else{
+        user.testGroup = "C"
+      }
+
+      addUser(user)
+        .then(deferred.resolve)
+        .catch(deferred.reject)
+
     })
 
   return deferred.promise

@@ -12,7 +12,7 @@ module.exports = function(req, res){
     .catch(function(){
         soundcloud.getUser(userId, accessToken)
           .then(function(user){
-            return db.addUser(user)
+            return db.addUserWithTestGroup(user)
           })
           .then(function(){res.send(200)})
           .catch(function(){res.send(401)})
