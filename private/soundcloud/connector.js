@@ -28,7 +28,10 @@ module.exports = {
 
 function getUser(id, accessToken){
   var deferred = q.defer()
-  SC.get("/users/"+id, function(err, user) {
+  let url = "/users/"+id
+  if(accessToken)
+    url = "/me/?oauth_token="+accessToken
+  SC.get(url, function(err, user) {
       if ( err ) {
           throw err;
       } else {
@@ -51,9 +54,13 @@ function getUnknownUser(id, maxId){
   return deferred.promise
 }
 
-function getFollowers(id){
+function getFollowers(id, accessToken){
     var deferred = q.defer()
-    SC.get("/users/"+id+"/followers", function(err, response) {
+    let url = "/users/"+id+"/followers"
+    if(accessToken)
+      url = "/me/followers?oauth_token="+accessToken
+
+    SC.get(url, function(err, response) {
         if ( err ) {
             console.log("error by get followers and id: "+id)
             deferred.resolve([])
@@ -64,9 +71,14 @@ function getFollowers(id){
     return deferred.promise
 }
 
-function getFollowings(id){
+function getFollowings(id, accessToken){
     var deferred = q.defer()
-    SC.get("/users/"+id+"/followings", function(err, response) {
+
+    let url = "/users/"+id+"/followings"
+    if(accessToken)
+      url = "/me/followings?oauth_token="+accessToken
+
+    SC.get(url, function(err, response) {
         if ( err ) {
             console.log("error by get followings and id: "+id)
             deferred.resolve([])
@@ -104,9 +116,13 @@ function getConnections(id){
     return deferred.promise
 }
 
-function getTracksFromUser(id){
+function getTracksFromUser(id, accessToken){
     var deferred = q.defer()
-    SC.get("/users/"+id+"/tracks", function(err, response) {
+    let url = "/users/"+id+"/tracks"
+    if(accessToken)
+      url = "/me/tracks?oauth_token="+accessToken
+
+    SC.get(url, function(err, response) {
         if ( err ) {
             console.log("error by get tracks and id: "+id)
             deferred.reject(err)
@@ -136,9 +152,13 @@ function getTracksFromUser(id){
     return deferred.promise
 }
 
-function getPlaylistsFromUser(id){
+function getPlaylistsFromUser(id, accessToken){
     var deferred = q.defer()
-    SC.get("/users/"+id+"/playlists", function(err, response) {
+    let url = "/users/"+id+"/playlists"
+    if(accessToken)
+      url = "/me/playlists?oauth_token="+accessToken
+
+    SC.get(url, function(err, response) {
         if ( err ) {
             console.log("error by get playlists and id: "+id)
             deferred.reject(err)
@@ -168,9 +188,13 @@ function getPlaylistsFromUser(id){
     return deferred.promise
 }
 
-function getFavoritesFromUser(id){
+function getFavoritesFromUser(id, accessToken){
     var deferred = q.defer()
-    SC.get("/users/"+id+"/favorites", function(err, response) {
+    let url = "/users/"+id+"/favorites"
+    if(accessToken)
+      url = "/me/favorites?oauth_token="+accessToken
+
+    SC.get(url, function(err, response) {
         if ( err ) {
             console.log("error by get favorites and id: "+id)
             deferred.reject(err)
