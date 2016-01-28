@@ -117,10 +117,12 @@ function getTracksFromUser(id){
             for(var i=0; i<response.length;i++){
                 tracks.push(response[i].id)
                 lookup[response[i].id] = {
-                    "id":           response[i].id,
-                    "title":        response[i].title,
-                    "artwork_url":  response[i].artwork_url,
-                    "username":     response[i].user.username
+                    "id":               response[i].id,
+                    "info": {
+                        "title":        response[i].title,
+                        "artwork_url":  response[i].artwork_url,
+                        "username":     response[i].user.username
+                    }
                 }
             }
 
@@ -150,9 +152,11 @@ function getPlaylistsFromUser(id){
                     playlist.push(response[i].tracks[j].id)
                     lookup[response[i].tracks[j].id] = {
                         "id":           response[i].tracks[j].id,
-                        "title":        response[i].tracks[j].title,
-                        "artwork_url":  response[i].tracks[j].artwork_url,
-                        "username":     response[i].tracks[j].user.username
+                        "info": {
+                            "title":        response[i].tracks[j].title,
+                            "artwork_url":  response[i].tracks[j].artwork_url,
+                            "username":     response[i].tracks[j].user.username
+                        }
                     }
                 }
                 playlists.playlists.push(playlist)
@@ -178,9 +182,11 @@ function getFavoritesFromUser(id){
                 tracks.push(response[i].id)
                 lookup[response[i].id] = {
                     "id":           response[i].id,
-                    "title":        response[i].title,
-                    "artwork_url":  response[i].artwork_url,
-                    "username":     response[i].user.username
+                    "info":{
+                        "title":        response[i].title,
+                        "artwork_url":  response[i].artwork_url,
+                        "username":     response[i].user.username
+                    }
                 }
             }
 
