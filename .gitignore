@@ -11,3 +11,4 @@ private/config.json
 
 src1/**/*.js
 src1/**/*.map
+src1/**/*.css
