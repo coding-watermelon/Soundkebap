@@ -75,6 +75,7 @@ function evaluateUser(user){
             //totalAvailable += recommendedTracks.length
             //totalRemoved += removedTracks.length
 
+
             for(let i=0;i<recommendedTracks.length;i++){
                 for(let j=0;j<topSongs;j++){
                     if(recommendedTracks[i] == removedTracks[j]){
@@ -116,7 +117,7 @@ function evaluateUsers(){
             evaluateUser(user)
                 .then(function(result){
 
-                    console.log("User: "+i+"\t\tID: "+user.id)
+                    //console.log("User: "+i+"\t\tID: "+user.id)
 
                     //if(i<10)
                     //    console.log("User: "+i+"\t\tPrecision: "+(result.precision*100).toFixed(2)+"%\tRecall: "+(result.recall*100).toFixed(2)+"%")
