@@ -119,10 +119,10 @@ function evaluateUsers(){
 
                     //console.log("User: "+i+"\t\tID: "+user.id)
 
-                    //if(i<10)
-                    //    console.log("User: "+i+"\t\tPrecision: "+(result.precision*100).toFixed(2)+"%\tRecall: "+(result.recall*100).toFixed(2)+"%")
-                    //else
-                    //    console.log("User: "+i+"\tPrecision: "+(result.precision*100).toFixed(2)+"%\tRecall: "+(result.recall*100).toFixed(2)+"%")
+                    if(i<10)
+                        console.log("User: "+i+"\t\tPrecision: "+(result.precision*100).toFixed(2)+"%\tRecall: "+(result.recall*100).toFixed(2)+"%")
+                    else
+                        console.log("User: "+i+"\tPrecision: "+(result.precision*100).toFixed(2)+"%\tRecall: "+(result.recall*100).toFixed(2)+"%")
 
                     overallPrecision = overallPrecision + (result.precision/ users.length)
                     overallRecall = overallRecall + (result.recall/ users.length)

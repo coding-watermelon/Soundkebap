@@ -39,7 +39,7 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
     var factors = []
     switch (userGroup){
         case 'A': factors =[5,5,1,1,1,1];break;
-        case 'B': factors =[1,1,5,1,5,1];break;
+        case 'B': factors =[1,1,5,1,1,1];break;
         case 'C': factors =[1,1,1,5,1,1];break;
         default : factors =[1,1,1,1,3,3];break;
     }
@@ -138,7 +138,7 @@ function getRecommendation(user){
 
     q.all(promises).spread(function(user, tracks){
 
-        collectValuesFromModules(user, tracks,20,userGroup).then(function(rankedTracks){
+        collectValuesFromModules(user, tracks,1000,userGroup).then(function(rankedTracks){
             deferred.resolve(rankedTracks)
         })
 
