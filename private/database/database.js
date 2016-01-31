@@ -25,7 +25,8 @@ module.exports = {
   getHistory,
   addSongToHistory,
   addSkipping,
-  getCrawledSongs
+  getCrawledSongs,
+  getCrawledPlaylists
 }
 // User part
 function getUser(userId){
@@ -369,7 +370,27 @@ function getCrawledSongs(){
       .db(config.database.name)
       .table('track')
       .orderBy({index: rethinkdb.desc('favoritings_count')})
-      .limit(200)
+      .limit(1000)
+      .run(dbConnection, function(err, cursor){
+        if (err) throw err
+        cursor.toArray(function(err, result) {
+          if (err) throw err
+          deferred.resolve(result)
+        })
+      })
+
+  return deferred.promise
+}
+
+function getCrawledPlaylists(){
+  const deferred = q.defer()
+
+  rethinkdb
+      .db(config.database.name)
+      .table('playlist')
+      .filter(function (user) {
+        return user("tracks").count().gt(25);
+      })
       .run(dbConnection, function(err, cursor){
         if (err) throw err
         cursor.toArray(function(err, result) {
@@ -382,7 +403,7 @@ function getCrawledSongs(){
 }
 
 //setTimeout(function(){
-//  getCrawledSongs().then(function(response){
+//  getCrawledPlaylists().then(function(response){
 //    console.log(response)
 //  })
 //},1000)

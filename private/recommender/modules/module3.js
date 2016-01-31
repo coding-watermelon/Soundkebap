@@ -51,7 +51,7 @@ function getRecommendation(favorites, playlists, tracks, maxTracks, factor){
     for(var i=0;i<tracks.length;i++){
 
         var userId = tracks[i].user_id
-        var similarity = 0
+        var similarity = 1
         var unionOfSongs = Object.keys(userSongs).length
 
         for(var j=0;j<tracks[i].tracks.length;j++){
@@ -79,7 +79,7 @@ function getRecommendation(favorites, playlists, tracks, maxTracks, factor){
 
         var userId = tracks[i].user_id
         if(similarities.hasOwnProperty(userId)){
-            var value = similarities[userId]+1
+            var value = similarities[userId]
 
             for(var j=0;j<tracks[i].tracks.length && j<maxTracks;j++){
                 var trackId = tracks[i].tracks[j]
