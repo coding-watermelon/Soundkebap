@@ -8,6 +8,7 @@ const module1 = require(__dirname + '/modules/module1.js'),
     module2 = require(__dirname + '/modules/module2.js'),
     module3 = require(__dirname + '/modules/module3.js'),
     module4 = require(__dirname + '/modules/module4.js'),
+    module5 = require(__dirname + '/modules/module5.js'),
     soundcloud = require(__dirname + '/../soundcloud/connector.js'),
     SC = require('node-soundcloud'),
     q = require('q')
@@ -36,10 +37,10 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
 
     var factors = []
     switch (userGroup){
-        case 'A': factors =[5,5,1,1];break;
-        case 'B': factors =[1,1,5,1];break;
-        case 'C': factors =[1,1,1,5];break;
-        default : factors =[1,1,1,1];break;
+        case 'A': factors =[5,5,1,1,1];break;
+        case 'B': factors =[1,1,5,1,1];break;
+        case 'C': factors =[1,1,1,5,1];break;
+        default : factors =[1,1,1,1,5];break;
     }
 
     var lookup = {}
@@ -50,20 +51,42 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
     promises.push(module2.getRecommendation(tracks.favorites,factors[1]))
     promises.push(module3.getRecommendation(user.favorites, user.playlists ,tracks.tracks,20,factors[2]))
     promises.push(module4.getRecommendation(user.playlists, tracks.playlists,factors[3]))
+    promises.push(module5.getRecommendation(factors[4]))
 
     q.all(promises).then(function(response){
         var tracks = {}
 
         for(var i=0;i<response.length;i++){
-            for(var j=0;j<response[i].length;j++){
-                var track = response[i][j]
-                if(tracks.hasOwnProperty(track.id)){
-                    tracks[track.id] += track.value
-                }
-                else{
-                    tracks[track.id] = track.value
+
+            if(response[i].hasOwnProperty('lookup')){
+                //handling mod 5&6
+                lookup = Object.assign(lookup,response[i].lookup)
+                for(var j=0;j<response[i].tracks.length;j++){
+                    var track = response[i].tracks[j]
+                    if(tracks.hasOwnProperty(track.id)){
+                        tracks[track.id] += track.value
+                    }
+                    else{
+                        tracks[track.id] = track.value
+                    }
                 }
             }
+            else{
+                //handling mod 1-4
+                for(var j=0;j<response[i].length;j++){
+                    var track = response[i][j]
+                    if(tracks.hasOwnProperty(track.id)){
+                        tracks[track.id] += track.value
+                    }
+                    else{
+                        tracks[track.id] = track.value
+                    }
+                }
+            }
+
+
+
+
         }
 
         var sortedTracks = []
@@ -118,37 +141,37 @@ function getRecommendation(user){
 
     //Jan: 82147580
     //Basti: 131842115
-   //getRecommendation({
-   //    "accessToken":  "1-162111-131842115-01c04c60d99c9" ,
-   //    "avatar_url": "https://i1.sndcdn.com/avatars-000171042308-wepww8-large.jpg",
-   //         "city":  "Perleberg" ,
-   //         "country": null ,
-   //         "description":  "" ,
-   //         "discogs_name": null ,
-   //         "first_name":  "CHRIS." ,
-   //         "followers_count": 203 ,
-   //         "followings_count": 11 ,
-   //         "full_name":  "CHRIS. TIAN" ,
-   //         "id": 131842115 ,
-   //         "kind":  "user" ,
-   //         "last_modified":  "2015/09/01 18:52:48 +0000" ,
-   //         "last_name":  "TIAN" ,
-   //         "myspace_name": null ,
-   //         "online": false ,
-   //         "permalink":  "christian2386" ,
-   //         "permalink_url": "http://soundcloud.com/christian2386",
-   //         "plan":  "Free" ,
-   //         "playlist_count": 0 ,
-   //         "public_favorites_count": 14 ,
-   //         "subscriptions": [ ],
-   //         "testGroup":  "C" ,
-   //         "track_count": 13 ,
-   //         "uri": "https://api.soundcloud.com/users/5426836",
-   //         "username":  "CHRIS.TIAN" ,
-   //         "website": null ,
-   //         "website_title": null
-   //     }
-   //).then(function(response){
-   //       console.log("\nFinal Recommendation\n======================\n")
-   //       console.log(response)
-   //   })
+   getRecommendation({
+       "accessToken":  "1-162111-131842115-01c04c60d99c9" ,
+       "avatar_url": "https://i1.sndcdn.com/avatars-000171042308-wepww8-large.jpg",
+            "city":  "Perleberg" ,
+            "country": null ,
+            "description":  "" ,
+            "discogs_name": null ,
+            "first_name":  "CHRIS." ,
+            "followers_count": 203 ,
+            "followings_count": 11 ,
+            "full_name":  "CHRIS. TIAN" ,
+            "id": 131842115 ,
+            "kind":  "user" ,
+            "last_modified":  "2015/09/01 18:52:48 +0000" ,
+            "last_name":  "TIAN" ,
+            "myspace_name": null ,
+            "online": false ,
+            "permalink":  "christian2386" ,
+            "permalink_url": "http://soundcloud.com/christian2386",
+            "plan":  "Free" ,
+            "playlist_count": 0 ,
+            "public_favorites_count": 14 ,
+            "subscriptions": [ ],
+            "testGroup":  "" ,
+            "track_count": 13 ,
+            "uri": "https://api.soundcloud.com/users/5426836",
+            "username":  "CHRIS.TIAN" ,
+            "website": null ,
+            "website_title": null
+        }
+   ).then(function(response){
+          console.log("\nFinal Recommendation\n======================\n")
+          console.log(response)
+      })

@@ -24,7 +24,8 @@ module.exports = {
   getGoldUsers,
   getHistory,
   addSongToHistory,
-  addSkipping
+  addSkipping,
+  getCrawledSongs
 }
 // User part
 function getUser(userId){
@@ -360,9 +361,28 @@ function addSongToHistory(userId, song){
 
   return deferred.promise
 }
-//
+
+function getCrawledSongs(){
+  const deferred = q.defer()
+
+  rethinkdb
+      .db(config.database.name)
+      .table('track')
+      .orderBy({index: rethinkdb.desc('favoritings_count')})
+      .limit(200)
+      .run(dbConnection, function(err, cursor){
+        if (err) throw err
+        cursor.toArray(function(err, result) {
+          if (err) throw err
+          deferred.resolve(result)
+        })
+      })
+
+  return deferred.promise
+}
+
 //setTimeout(function(){
-//  addSongToHistory(131842115,{"trackId":228366807,"listeningCount":0,"skipCount":1}).then(function(response){
+//  getCrawledSongs().then(function(response){
 //    console.log(response)
 //  })
 //},1000)
