@@ -87,6 +87,29 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
             }
         }
 
+        var userSongs = {}
+        for(var i=0;i< user.favorites.length; i++){
+            for(var j=0;j<user.favorites[i].favorites.length;j++){
+                var trackId = user.favorites[i].favorites[j]
+                if(userSongs.hasOwnProperty(trackId))
+                    userSongs[trackId] += 2
+                else
+                    userSongs[trackId] = 2
+            }
+        }
+        for(var i=0;i<user.playlists.length;i++){
+            for(var j=0;j<user.playlists[i].playlists.length;j++){
+                var playlist = user.playlists[i].playlists[j]
+                for(var k=0;k<playlist.length;k++){
+                    var trackId = playlist[k]
+                    if(userSongs.hasOwnProperty(trackId))
+                        userSongs[trackId] += 1
+                    else
+                        userSongs[trackId] =1
+                }
+            }
+        }
+
         var sortedTracks = []
         for(let track in tracks){
             if(Object.keys(lookup).length > 0){
@@ -98,6 +121,8 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
                     lookup[track].info = {}
                     lookup[track].id = track
                 }
+                if(userSongs.hasOwnProperty(track))
+                    lookup[track].value /= 5
 
             }
 
@@ -120,8 +145,6 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
             //for evaluation
             deferred.resolve(trackIds)
         }
-
-
     })
 
     return deferred.promise
