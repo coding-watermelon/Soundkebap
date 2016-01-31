@@ -3,7 +3,6 @@
  Module returns most favorite songs from crawled songs
 
  */
-const soundcloud = require(__dirname + '/../../soundcloud/connector.js')
 const db = require(__dirname + '/../../database/database.js')
 const q = require('q')
 const helperModule = require(__dirname + '/helperModule.js')
@@ -23,7 +22,7 @@ function getRecommendation(factor){
         let lookup = {}
 
         for(let i=0;i<songs.length;i++){
-            recommendedTracks[songs[i].id] = songs[i]["favoritings_count"]/maxFavorites
+            recommendedTracks[songs[i].id] = Math.max(0.5,songs[i]["favoritings_count"]/maxFavorites)
             lookup[songs[i].id] = {
                 'id': songs[i].id,
                 'info':{
