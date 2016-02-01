@@ -29,7 +29,7 @@ function getRecommendation(user){
                     const minTimespan = 144000000 //1000ms * 60s * 60min * 4h
                     if(timespan > minTimespan){
                         //give a penalty to already listened songs
-                        let listeningPenalty = Math.min(3, (0.25*Math.log2(history[trackId]["listening-count"]+1) +
+                        let listeningPenalty = Math.min(3, (0.5*Math.log2(history[trackId]["listening-count"]+1) +
                                                             Math.log2(history[trackId]["skip-count"]+1)))
                         tracks[i].value -= listeningPenalty
                         sortedTracks.push([tracks[i], tracks[i].value])
@@ -52,7 +52,7 @@ function getRecommendation(user){
                 let artist = sortedTracks[j].info.username
                 if(artist != undefined){
                     if(recommendedArtists.hasOwnProperty(artist)){
-                        if(recommendedArtists[artist]<3){
+                        if(recommendedArtists[artist]<2){
                             recommendedTracks.push(sortedTracks[j])
                             recommendedArtists[artist]++
                             i++

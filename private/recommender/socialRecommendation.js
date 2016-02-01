@@ -38,9 +38,9 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
 
     var factors = []
     switch (userGroup){
-        case 'A': factors =[5,5,1,1,1,1];break;
-        case 'B': factors =[1,1,5,1,1,1];break;
-        case 'C': factors =[1,1,1,5,1,1];break;
+        case 'A': factors =[3,3,1,1,3,3];break;
+        case 'B': factors =[1,1,3,1,3,3];break;
+        case 'C': factors =[1,1,1,3,3,3];break;
         default : factors =[1,1,1,1,3,3];break;
     }
 
@@ -95,6 +95,15 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
                     userSongs[trackId] += 2
                 else
                     userSongs[trackId] = 2
+            }
+        }
+        for(var i=0;i< user.tracks.length; i++){
+            for(var j=0;j<user.tracks[i].tracks.length;j++){
+                var trackId = user.tracks[i].tracks[j]
+                if(userSongs.hasOwnProperty(trackId))
+                    userSongs[trackId] += 1
+                else
+                    userSongs[trackId] = 1
             }
         }
         for(var i=0;i<user.playlists.length;i++){
