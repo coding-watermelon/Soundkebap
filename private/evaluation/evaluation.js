@@ -93,7 +93,7 @@ function evaluateUser(user){
             }
             else{
                 //console.log("Recommended:  "+totalAvailable)
-                deferred.resolve({"precision":precision,"recall":recall})
+                deferred.resolve({"precision":(precision/maxFolds),"recall":(recall/maxFolds)})
             }
         })
     }
