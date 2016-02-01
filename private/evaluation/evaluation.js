@@ -77,8 +77,8 @@ function evaluateUser(user){
                 }
             }
 
-            precision += (commonIds/(recommendedTracks.length*maxFolds))
-            recall += (commonIds/(removedTracks.length*maxFolds))
+            precision += (commonIds/(recommendedTracks.length))  // should be: TruePositive / ( TruePositive + FalsePositive)
+            recall += (commonIds/(commonIds + removedTracks.length))         // should be: TruePositive / (TruePositive + FalseNegative)
 
             if(iteration<(maxFolds-1)){
                 iteration ++

@@ -39,7 +39,8 @@ function getIds(count){
         promises.push(getUser(maxId))
     }
 
-    q.allSettled(promises).then(function(response){
+    q.allSettled(promises)
+      .then(function(response){
         let ids = []
 
         for(let i=0;i<response.length;i++){
@@ -47,7 +48,7 @@ function getIds(count){
         }
 
         deferred.resolve(ids)
-    })
+      })
 
     return deferred.promise
 }
