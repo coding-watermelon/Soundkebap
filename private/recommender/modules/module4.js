@@ -61,17 +61,19 @@ function getRecommendation(user, otherUsers, factor){
     var similarUsers = []
     for(var i=0;i< otherUserTracks.length;i++){
         var userId = otherUserTracks[i].user_id
-        var similarity = 0
+        var similarity = 1
+        var unionOfSongs = Object.keys(userTracks).length
+
         for(var track in otherUserTracks[i].tracks){
-            if(userTracks.hasOwnProperty(track)){
+            if(userTracks.hasOwnProperty(track))
                 similarity = similarity + userTracks[track] + otherUserTracks[i].tracks[track]
-            }
+            else
+                unionOfSongs ++
         }
-        similarUsers.push({"user_id":userId,"similarity":similarity})
+        similarUsers.push({"user_id":userId,"similarity":similarity/unionOfSongs})
     }
 
     similarUsers = similarUsers.sort(function(a,b){return b.similarity - a.similarity})
-    similarUsers = similarUsers.slice(0,5)
 
     var similarities = {}
     for(var i=0; i<similarUsers.length; i++){
@@ -86,7 +88,7 @@ function getRecommendation(user, otherUsers, factor){
         if(similarities.hasOwnProperty(userId)){
 
             for(var track in otherUserTracks[i].tracks){
-                var value = similarities[userId] + otherUserTracks[i].tracks[track]
+                var value = similarities[userId]
 
                 if(recommendedTracks.hasOwnProperty(track)){
                     recommendedTracks[track] += value

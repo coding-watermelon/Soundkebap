@@ -16,6 +16,9 @@ function evaluateUser(user){
     let precision = 0.0
     let recall = 0.0
 
+    //var totalRemoved = 0
+    //var totalAvailable = 0
+
     function executeEvaluation(){
         let removedTracks = []
         let favorites = []
@@ -66,8 +69,12 @@ function evaluateUser(user){
 
         let topSongs = Math.max(removedTracks.length,20)
 
-        recommender.collectValuesFromModules(availableTracks,user.otherUsers,topSongs,"A").then(function(recommendedTracks){
+        recommender.collectValuesFromModules(availableTracks,user.otherUsers,topSongs,"").then(function(recommendedTracks){
             let commonIds = 0
+
+            //totalAvailable += recommendedTracks.length
+            //totalRemoved += removedTracks.length
+
 
             for(let i=0;i<recommendedTracks.length;i++){
                 for(let j=0;j<topSongs;j++){
@@ -85,6 +92,7 @@ function evaluateUser(user){
                 executeEvaluation()
             }
             else{
+                //console.log("Recommended:  "+totalAvailable)
                 deferred.resolve({"precision":precision,"recall":recall})
             }
         })
@@ -105,12 +113,16 @@ function evaluateUsers(){
         let overallRecall = 0.0
 
         function callEvaluateUser(user){
-            console.log("evaluate user "+i)
+            //console.log("evaluate user "+i)
             evaluateUser(user)
                 .then(function(result){
 
-                    //console.log(result.precision, result.recall)
-                    //console.log("=====================")
+                    //console.log("User: "+i+"\t\tID: "+user.id)
+
+                    if(i<10)
+                        console.log("User: "+i+"\t\tPrecision: "+(result.precision*100).toFixed(2)+"%\tRecall: "+(result.recall*100).toFixed(2)+"%")
+                    else
+                        console.log("User: "+i+"\tPrecision: "+(result.precision*100).toFixed(2)+"%\tRecall: "+(result.recall*100).toFixed(2)+"%")
 
                     overallPrecision = overallPrecision + (result.precision/ users.length)
                     overallRecall = overallRecall + (result.recall/ users.length)

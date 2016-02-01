@@ -29,7 +29,7 @@ function getRecommendation(user){
                     const minTimespan = 144000000 //1000ms * 60s * 60min * 4h
                     if(timespan > minTimespan){
                         //give a penalty to already listened songs
-                        let listeningPenalty = Math.min(3, (0.25*Math.log2(history[trackId]["listening-count"]+1) +
+                        let listeningPenalty = Math.min(3, (0.5*Math.log2(history[trackId]["listening-count"]+1) +
                                                             Math.log2(history[trackId]["skip-count"]+1)))
                         tracks[i].value -= listeningPenalty
                         sortedTracks.push([tracks[i], tracks[i].value])
@@ -44,7 +44,33 @@ function getRecommendation(user){
             sortedTracks.sort(function(a, b) {return b[1] - a[1]})
             sortedTracks = sortedTracks.map(function ( track ) { return track[0] })
 
-            deferred.resolve(sortedTracks.slice(0,20))
+            let i=0
+            let j=0
+            let recommendedTracks = []
+            let recommendedArtists = {}
+            while (i<20 && j<sortedTracks.length){
+                let artist = sortedTracks[j].info.username
+                if(artist != undefined){
+                    if(recommendedArtists.hasOwnProperty(artist)){
+                        if(recommendedArtists[artist]<2){
+                            recommendedTracks.push(sortedTracks[j])
+                            recommendedArtists[artist]++
+                            i++
+                        }
+                    }
+                    else{
+                        recommendedTracks.push(sortedTracks[j])
+                        recommendedArtists[artist] = 1
+                        i++
+                    }
+                }
+                else{
+                    recommendedTracks.push(sortedTracks[j])
+                    i++
+                }
+                j++
+            }
+            deferred.resolve(recommendedTracks)
         })
     })
 
@@ -73,6 +99,7 @@ function getRecommendation(user){
 //    website_title: null,
 //    online: false,
 //    track_count: 0,
+//    testGroup: "A",
 //    playlist_count: 1,
 //    plan: 'Free',
 //    public_favorites_count: 3,

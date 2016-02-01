@@ -224,15 +224,15 @@ function getFavoritesFromUser(id, accessToken){
     return deferred.promise
 }
 
-function getTracks(users){
+function getTracks(users, accessToken){
     var deferred = q.defer()
     var promises = []
 
     for(var i=0;i<users.length;i++){
         var id = users[i]
-        promises.push(getTracksFromUser(id))
-        promises.push(getPlaylistsFromUser(id))
-        promises.push(getFavoritesFromUser(id))
+        promises.push(getTracksFromUser(id,accessToken))
+        promises.push(getPlaylistsFromUser(id,accessToken))
+        promises.push(getFavoritesFromUser(id,accessToken))
     }
 
     q.allSettled(promises).then(function(response){
