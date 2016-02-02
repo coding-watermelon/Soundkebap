@@ -23,7 +23,8 @@ module.exports = {
     getPlaylistsFromUser,
     getTracks,
     getFavoritesFromUser,
-    getPlaylistByid
+    getPlaylistByid,
+    getTrackById
 }
 
 function getUser(id, accessToken){
@@ -270,4 +271,19 @@ function getPlaylistByid(id){
       }
   })
   return deferred.promise
+}
+
+function getTrackById(id){
+    const deferred = q.defer()
+    SC.get("/tracks/"+id, function(err, response) {
+        if ( err ) {
+            if(err[0] && err[0].hasOwnProperty("error_message") && err[0].error_message == '404 - Not Found')
+                deferred.resolve({"id":id,"username":"Not found"})
+            else
+                deferred.resolve({"id":id,"username":"Request Failed"})
+        } else {
+            deferred.resolve({"id":response.id,"username":response.user.username})
+        }
+    })
+    return deferred.promise
 }

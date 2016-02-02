@@ -35,10 +35,10 @@ function getRecommendation(user, similarUsers, factor){
                     var trackId = playlist[k]
 
                     if(userTracks.hasOwnProperty(trackId)){
-                        userTracks[trackId] ++
+                        userTracks[trackId] += 5
                     }
                     else{
-                        userTracks[trackId] = 1
+                        userTracks[trackId] = 5
                     }
                 }
             }

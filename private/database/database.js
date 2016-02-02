@@ -26,6 +26,7 @@ module.exports = {
   addSongToHistory,
   addSkipping,
   getCrawledSongs,
+  updateSong,
   getCrawledPlaylists
 }
 // User part
@@ -363,20 +364,38 @@ function addSongToHistory(userId, song){
   return deferred.promise
 }
 
-function getCrawledSongs(){
+function getCrawledSongs(limit, offset){
   const deferred = q.defer()
 
   rethinkdb
       .db(config.database.name)
       .table('track')
       .orderBy({index: rethinkdb.desc('favoritings_count')})
-      .limit(1000)
+      .slice(limit,limit+offset)
       .run(dbConnection, function(err, cursor){
         if (err) throw err
         cursor.toArray(function(err, result) {
           if (err) throw err
           deferred.resolve(result)
         })
+      })
+
+  return deferred.promise
+}
+
+function updateSong(track){
+  const deferred = q.defer()
+
+  rethinkdb
+      .db(config.database.name)
+      .table('track')
+      .get(track.id)
+      .update({username: track.username})
+      .run(dbConnection, function (err, result) {
+        if (err)
+          deferred.reject(err)
+        else
+          deferred.resolve("updated song")
       })
 
   return deferred.promise
