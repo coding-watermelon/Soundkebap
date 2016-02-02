@@ -84,8 +84,8 @@ function evaluateUser(user){
                 }
             }
 
-            precision += (commonIds/(recommendedTracks.length*maxFolds))
-            recall += (commonIds/(removedTracks.length*maxFolds))
+            precision += (commonIds/(recommendedTracks.length))  // should be: TruePositive / ( TruePositive + FalsePositive)
+            recall += (commonIds/(removedTracks.length))         // should be: TruePositive / (TruePositive + FalseNegative)
 
             if(iteration<(maxFolds-1)){
                 iteration ++
@@ -93,7 +93,7 @@ function evaluateUser(user){
             }
             else{
                 //console.log("Recommended:  "+totalAvailable)
-                deferred.resolve({"precision":precision,"recall":recall})
+                deferred.resolve({"precision":(precision/maxFolds),"recall":(recall/maxFolds)})
             }
         })
     }
