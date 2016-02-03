@@ -25,7 +25,7 @@ function getNormalizedTracks(tracks, factor){
         var normalizedTracks = []
         for(var i=0;i<sortedTracks.length;i++){
             var id = sortedTracks[i][0]
-            var value = sortedTracks[i][1] / maxCount
+            var value = Math.max(0.25,sortedTracks[i][1] / maxCount)
             value *= factor
             normalizedTracks.push({"id":id,"value":value})
         }

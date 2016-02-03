@@ -65,7 +65,7 @@ function getRecommendation(favorites, playlists, tracks, maxTracks, factor){
             similarUsers.push({"user_id":userId,"similarity":similarity/unionOfSongs})
     }
     similarUsers = similarUsers.sort(function(a,b){return b.similarity - a.similarity})
-    similarUsers = similarUsers.slice(0,5)
+    similarUsers = similarUsers.slice(0,20)
 
     var similarities = {}
 
