@@ -27,6 +27,7 @@ module.exports = {
   addSkipping,
   getCrawledSongs,
   updateSong,
+  getSongById,
   getCrawledPlaylists
 }
 // User part
@@ -372,6 +373,7 @@ function getCrawledSongs(limit, offset){
       .table('track')
       .orderBy({index: rethinkdb.desc('favoritings_count')})
       .slice(limit,limit+offset)
+      //.filter(rethinkdb.row('username').eq("").default(true))
       .run(dbConnection, function(err, cursor){
         if (err) throw err
         cursor.toArray(function(err, result) {
@@ -396,6 +398,24 @@ function updateSong(track){
           deferred.reject(err)
         else
           deferred.resolve("updated song")
+      })
+
+  return deferred.promise
+}
+
+function getSongById(id){
+  const deferred = q.defer()
+  id = parseInt(id)
+
+  rethinkdb
+      .db(config.database.name)
+      .table('track')
+      .get(id)
+      .run(dbConnection, function (err, result) {
+        if (err)
+          deferred.reject(err)
+        else
+          deferred.resolve(result)
       })
 
   return deferred.promise

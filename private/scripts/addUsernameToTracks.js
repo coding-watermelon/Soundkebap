@@ -6,7 +6,7 @@ const q          = require('q')
 module.exports = {start}
 
 setTimeout(function(){
-    start(20000,40000)
+    start(0,50000)
         .catch(function(err){
             console.log(err)
         })
@@ -21,6 +21,7 @@ function start(start, offset){
         getNextTracks(start,offset).then(function(tracks){
 
             let i=0
+            console.log(tracks.length)
             function iterateOverTracks(){
                 getSongInformation(tracks[i].id).then(function(track){
                     console.log(i + "\tid: "+track.id+"\tusername: "+track.username)
