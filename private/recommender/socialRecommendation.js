@@ -38,10 +38,10 @@ function collectValuesFromModules(user, tracks, topSongs, userGroup){
 
     var factors = []
     switch (userGroup){
-        case 'A': factors =[3,3,1,1,3,3];break;
-        case 'B': factors =[1,1,3,1,3,3];break;
-        case 'C': factors =[1,1,1,3,3,3];break;
-        default : factors =[1,1,1,1,3,3];break;
+        case 'A': factors =[3,3,1,1,3,2];break;
+        case 'B': factors =[1,1,3,1,3,2];break;
+        case 'C': factors =[1,1,1,3,3,2];break;
+        default : factors =[1,1,1,1,3,2];break;
     }
 
     var lookup = {}
