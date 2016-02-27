@@ -48,7 +48,8 @@ function getRecommendation(user){
             let j=0
             let recommendedTracks = []
             let recommendedArtists = {}
-            while (i<20 && j<sortedTracks.length){
+
+            function collectSongs(){
                 let artist = sortedTracks[j].info.username
                 if(artist != undefined){
                     if(recommendedArtists.hasOwnProperty(artist)){
@@ -63,14 +64,35 @@ function getRecommendation(user){
                         recommendedArtists[artist] = 1
                         i++
                     }
+                    j++
+
+                    if(i<20 && j<sortedTracks.length)
+                        collectSongs()
+                    else
+                        deferred.resolve(recommendedTracks)
                 }
                 else{
-                    recommendedTracks.push(sortedTracks[j])
-                    i++
+                    getSongInformation(sortedTracks[j].id).then(function(info){
+                        sortedTracks[j].info = info
+                        collectSongs()  //instead of rewriting the upper procedure for adding, we just call the function without incrementing i or j
+                    })
                 }
-                j++
+
             }
-            deferred.resolve(recommendedTracks)
+
+            function getSongInformation(id){
+                const deferred = q.defer()
+                db.getSongById(id).then(function(track){
+                    deferred.resolve({
+                            "title":        track.title,
+                            "artwork_url":  track.artwork_url,
+                            "username":     track.username
+                        })
+                })
+                return deferred.promise
+            }
+
+            collectSongs()
         })
     })
 
@@ -79,7 +101,7 @@ function getRecommendation(user){
 
 
 
-//const user = { id: 131842115,
+//const user = { id: 62853215  ,
 //    kind: 'user',
 //    permalink: 'sebastian-rehfeldt-1',
 //    username: 'Sebastian Rehfeldt',
@@ -99,7 +121,7 @@ function getRecommendation(user){
 //    website_title: null,
 //    online: false,
 //    track_count: 0,
-//    testGroup: "A",
+//    testGroup: "C",
 //    playlist_count: 1,
 //    plan: 'Free',
 //    public_favorites_count: 3,

@@ -35,10 +35,10 @@ function getRecommendation(user, similarUsers, factor){
                     var trackId = playlist[k]
 
                     if(userTracks.hasOwnProperty(trackId)){
-                        userTracks[trackId] ++
+                        userTracks[trackId] += 5
                     }
                     else{
-                        userTracks[trackId] = 1
+                        userTracks[trackId] = 5
                     }
                 }
             }
@@ -96,11 +96,11 @@ function getRecommendation(user, similarUsers, factor){
 
             for(var track in otherTracks[user].tracks){
                 if(userTracks.hasOwnProperty(track))
-                    similarity = similarity + userTracks[track] + otherTracks[user].tracks[track]
+                    similarity = similarity + userTracks[track]
                 else
                     unionOfSongs ++
             }
-            if(similarity>1)
+            if(similarity>2)
                 similarUsers.push({"user_id":userId,"similarity":similarity/unionOfSongs})
         }
 

@@ -16,13 +16,12 @@ function getRecommendation(factor){
     //TODO: get genre of user and return top songs from that genre
     var deferred = q.defer()
 
-    db.getCrawledSongs().then(function(songs){
-        let maxFavorites = songs[0]["favoritings_count"]
+    db.getCrawledSongs(0,1000).then(function(songs){
         let recommendedTracks = {}
         let lookup = {}
 
         for(let i=0;i<songs.length;i++){
-            recommendedTracks[songs[i].id] = Math.max(0.5,songs[i]["favoritings_count"]/maxFavorites)
+            recommendedTracks[songs[i].id] = songs[i]["favoritings_count"]
             lookup[songs[i].id] = {
                 'id': songs[i].id,
                 'info':{
