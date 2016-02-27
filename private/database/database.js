@@ -6,19 +6,33 @@ const config        =   require(__dirname + "/../config.json"),
 let   dbConnection  = null
 
 //Build up database connection
-rethinkdb
-  .connect({ host: config.database.host, port: config.database.port }, function(err, conn) {
-  if(err) throw err
-  console.log("Connected to RethinkDB")
-  dbConnection = conn
-})
+function connect(){
+  var deferred = q.defer()
 
+  if(!dbConnection){
+    rethinkdb
+      .connect({ host: config.database.host, port: config.database.port }, function(err, conn) {
+      if(err){ deferred.reject(); throw err }
+      console.log("Connected to RethinkDB")
+      dbConnection = conn
+      deferred.resolve()
+    })
+  }else {
+    deferred.resolve()
+  }
+
+  return deferred.promise
+}
+
+connect()
 
 module.exports = {
+  connect,
   getUser,
   addUser,
   addUserWithTestGroup,
   addTrack,
+  getTrack,
   addPlaylist,
   addGoldUser,
   getGoldUsers,
@@ -26,7 +40,9 @@ module.exports = {
   addSongToHistory,
   addSkipping,
   getCrawledSongs,
-  getCrawledPlaylists
+  getCrawledPlaylists,
+  playlistsWithTrack,
+  getTracksForPlaylist
 }
 // User part
 function getUser(userId){
@@ -186,6 +202,26 @@ function addTrack (track) {
   return deferred.promise
 }
 
+
+function getTrack (trackId) {
+  const deferred = q.defer()
+
+  rethinkdb
+    .db(config.database.name)
+    .table('track')
+    .get(trackId)
+    .run(dbConnection, function(err, track){
+      if(err)
+        deferred.reject(err)
+      else
+        deferred.resolve({
+          title: track.title ? track.title : "",
+          artwork_url: track.artwork_url ? track.artwork_url : "",
+          username: track.username ? track.username : ""
+        })
+    })
+  return deferred.promise
+}
 // ###################### playlists
 
 function addPlaylist (playlist) {
@@ -205,6 +241,63 @@ function addPlaylist (playlist) {
   return deferred.promise
 }
 
+function playlistsWithTrack (trackId) {
+  const deferred = q.defer()
+
+  rethinkdb
+    .db(config.database.name)
+    .table('trackContainment')
+    .get(trackId)
+    .run(dbConnection, function(err, track){
+      if(err)
+        deferred.reject(err)
+      else{
+        if(track){
+          deferred.resolve(track.playlists)
+        }else{
+          deferred.resolve([])
+        }
+      }
+    })
+
+    // .filter(
+    //   rethinkdb.row('tracks').contains(function(track){
+    //     return track.eq(trackId)
+    //   })
+    // )
+    // .run(dbConnection, function(err, cursor){
+    //   if(err)
+    //     deferred.reject(err)
+    //   else{
+    //     cursor.toArray(function(err, result){
+    //       if(err)
+    //         deferred.reject()
+    //       else
+    //         deferred.resolve(result)
+    //     })
+    //   }
+    // })
+
+  return deferred.promise
+}
+
+function getTracksForPlaylist(playlistId){
+  const deferred = q.defer()
+
+  rethinkdb
+    .db(config.database.name)
+    .table('playlist')
+    .get(playlistId)
+    .run(dbConnection, function(err, playlist){
+      if(err)
+        deferred.reject(err)
+      else{
+        deferred.resolve(playlist.tracks)
+      }
+    })
+
+  return deferred.promise
+}
 
 // ####################### gold data set for evaluation
 

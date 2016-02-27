@@ -24,6 +24,8 @@ export class SoundcloudAuthorizer {
   connectWithSoundcloud(){
     this.clientId = "a1c4188f7622b71c3e7c6cf7567fc488"
     this.callbackUrl = "http://soundkebap.markus-petrykowski.de"
+    // this.clientId = "91bc651673fe4dd9d15c4d84b0627a93"
+    // this.callbackUrl = "http://localhost:7070"
     window.location.href = `
     https://soundcloud.com/connect?client_id=` + this.clientId +
     "&display=popup&redirect_uri=" + this.callbackUrl +

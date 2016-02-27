@@ -8,7 +8,8 @@
     "tsc:w": "tsc -p src1 -w",
     "stylusCompile:watch": "stylus -w -u nib src1/assets/styles/main.styl",
     "lite": "lite-server --open hero_tutorial",
-    "start": "concurrent \"npm run tsc:w\" \"npm run stylusCompile:watch\" \"node app.js\""
+    "start": "concurrent \"npm run tsc:w\" \"npm run stylusCompile:watch\" \"node app.js\"",
+    "dev": "node app.js"
   },
   "repository": {
     "type": "git",

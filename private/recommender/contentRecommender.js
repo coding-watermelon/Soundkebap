@@ -5,7 +5,8 @@ Short Module description
 */
 
 const socialRecommender = require(__dirname + "/socialRecommendation.js"),
-      q                 = require('q')
+      q                 = require('q'),
+      frequentBasket    = require(__dirname + "/modules/c_module1.js")
 
 module.exports = {
   getRecommendation
@@ -14,6 +15,7 @@ module.exports = {
 function getRecommendation(user){
   const deferred = q.defer()
   socialRecommender.getRecommendation(user)
+    .then(frequentBasket.getRecommendation)
     .then(function(tracks){
       deferred.resolve(tracks)
     })
